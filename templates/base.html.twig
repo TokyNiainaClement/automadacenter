@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}
+			{% endblock %}
+		</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+	</head>
+
+	<body>
+
+		{{ importmap('app') }}
+
+		{% block header %}
+			{% include "partials/_header.html.twig" %}
+		{% endblock %}
+
+		{% block body %}{% endblock %}
+		{# <main class="max-w-6xl w-full mx-auto px-6 py-10 flex-1">
+					</main> #}
+
+		{% block footer %}
+			{% include "partials/_footer.html.twig" %}
+		{% endblock %}
+
+	</body>
+</html>
