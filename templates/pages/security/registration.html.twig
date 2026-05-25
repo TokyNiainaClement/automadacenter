@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}AutoMadaCenter - Inscription
+			{% endblock %}
+		</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+	</head>
+
+	{{ importmap('app') }}
+
+	{% block body %}
+		<body class="bg-[#1a1a1a] min-h-screen text-white flex items-center justify-center px-4">
+			<div class="w-full max-w-md bg-[#222222] border border-[#333] rounded-2xl p-8 shadow-2xl">
+				<div class="text-center mb-8">
+					<h1 class="text-3xl font-black tracking-tight">
+						<span class="text-white">auto</span>
+						<span class="text-[#F97316]">mada</span>
+						<span class="text-white">center</span>
+					</h1>
+					<p class="text-gray-500 mt-2 text-sm">Création de compte</p>
+				</div>
+
+				{# <form class="space-y-5">
+																                    <div>
+																						<label class="text-sm text-gray-400 block mb-2">Nom complet</label>
+																						<input type="text" class="w-full bg-[#111111] border border-[#333] focus:border-[#F97316] rounded-lg px-4 py-3 outline-none" placeholder="Rakoto Jean"/>
+																					</div>
+																
+																					<div>
+																						<label class="text-sm text-gray-400 block mb-2">Adresse email</label>
+																						<input type="email" class="w-full bg-[#111111] border border-[#333] focus:border-[#F97316] rounded-lg px-4 py-3 outline-none" placeholder="rakoto@example.com"/>
+																					</div>
+																
+																					<div>
+																						<label class="text-sm text-gray-400 block mb-2">Mot de passe</label>
+																						<input class="w-full bg-[#111111] border border-[#333] focus:border-[#F97316] rounded-lg px-4 py-3 outline-none" placeholder="********"/>
+																					</div>
+																
+																					<button type="submit" class="w-full bg-[#F97316] hover:bg-[#ea6500] transition-colors py-3 rounded-lg font-bold">
+																						Créer mon compte
+																					</button>
+																				</form> #}
+				{{ form_start(form) }}
+				<div class="space-y-5">
+					<div>
+						{{ form_label(form.fullName) }}
+						{{ form_widget(form.fullName) }}
+						{{ form_errors(form.fullName) }}
+					</div>
+
+					<div>
+						{{ form_label(form.email) }}
+						{{ form_widget(form.email) }}
+						{{ form_errors(form.email) }}
+					</div>
+
+					<div>
+						{{ form_label(form.plaintextPassword.first) }}
+						{{ form_widget(form.plaintextPassword.first) }}
+						{{ form_errors(form.plaintextPassword.first) }}
+					</div>
+
+					<div>
+						{{ form_label(form.plaintextPassword.second) }}
+						{{ form_widget(form.plaintextPassword.second) }}
+						{{ form_errors(form.plaintextPassword.second) }}
+					</div>
+					{{ form_row(form.submit) }}
+				</div>
+				{{ form_end(form) }}
+
+				<div class="flex justify-between mt-6 text-sm">
+					<a href="{{ path('security.login') }}" class="text-[#F97316]">Déjà un compte</a>
+				</div>
+			</div>
+		</body>
+	{% endblock %}
+</html>

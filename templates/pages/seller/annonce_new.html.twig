@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	AutoMadaCenter - Création d'une annonce
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-5xl mx-auto bg-[#222222] border border-[#333] rounded-2xl p-8 my-5">
+		<h1 class="text-4xl font-black mb-8">Ajouter une annonce</h1>
+
+		{{ form_start(form) }}
+		<div class="grid md:grid-cols-2 gap-5">
+			<div class="grid md:columns-1">
+				{{ form_label(form.title) }}
+				{{ form_widget(form.title) }}
+			</div>
+			<div class="grid md:columns-1">
+				{{ form_label(form.price) }}
+				{{ form_widget(form.price) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.brand) }}
+				{{ form_widget(form.brand) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.model) }}
+				{{ form_widget(form.model) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.year) }}
+				{{ form_widget(form.year) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.mileage) }}
+				{{ form_widget(form.mileage) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.fuelType) }}
+				{{ form_widget(form.fuelType) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.transmission) }}
+				{{ form_widget(form.transmission) }}
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.color) }}
+				{{ form_widget(form.color) }}
+			</div>
+
+		</div>
+		<div class="grid md:columns-2">
+			{{ form_label(form.description) }}
+			{{ form_widget(form.description) }}
+		</div>
+		<div class="grid md:grid-cols-2 gap-5">
+			<div class="grid md:columns-1">
+				{{ form_label(form.vehicleCondition) }}
+				{{ form_widget(form.vehicleCondition) }}
+			</div>
+			<div class="grid md:columns-1">
+				{{ form_label(form.city) }}
+				{{ form_widget(form.city) }}
+			</div>
+		</div>
+
+		<div class="grid md:grid-cols-2 gap-5">
+			<div class="grid md:columns-1">
+				{{ form_label(form.imageFile) }}
+				{{ form_widget(form.imageFile) }}
+			</div>
+		</div>
+
+		{{ form_row(form.submit) }}
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

@@ -16,7 +16,7 @@
 		{% endblock %}
 	</head>
 
-	<body>
+	<body class="bg-[#1a1a1a] text-white">
 
 		{{ importmap('app') }}
 
@@ -24,9 +24,8 @@
 			{% include "partials/_header.html.twig" %}
 		{% endblock %}
 
-		{% block body %}{% endblock %}
-		{# <main class="max-w-6xl w-full mx-auto px-6 py-10 flex-1">
-					</main> #}
+		{% block body %}
+		{% endblock %}
 
 		{% block footer %}
 			{% include "partials/_footer.html.twig" %}

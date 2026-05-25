@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	AutoMadaCenter - Tableau de bord vendeur
+{% endblock %}
+
+{% block body %}
+	<div class="grid grid-cols-[260px_1fr] min-h-screen">
+		<aside class="bg-[#111111] border-r border-[#333] p-6">
+			<h1 class="text-2xl font-black mb-10">
+				<span class="text-white">auto</span>
+				<span class="text-[#F97316]">mada</span>
+			</h1>
+
+			<nav class="space-y-3">
+				<a href="#" class="block bg-[#F97316] px-4 py-3 rounded-xl font-semibold">
+					Dashboard
+				</a>
+
+				<a href="#" class="block bg-[#222222] hover:bg-[#2d2d2d] px-4 py-3 rounded-xl">
+					Mes annonces
+				</a>
+
+				<a href="#" class="block bg-[#222222] hover:bg-[#2d2d2d] px-4 py-3 rounded-xl">
+					Messages
+				</a>
+
+				<a href="#" class="block bg-[#222222] hover:bg-[#2d2d2d] px-4 py-3 rounded-xl">
+					Statistiques
+				</a>
+			</nav>
+		</aside>
+
+		<main class="p-8">
+			<div class="flex justify-between items-center mb-8">
+				<div>
+					<h2 class="text-4xl font-black">Dashboard vendeur</h2>
+					<p class="text-gray-500 mt-2">Bienvenue Madagascar Auto Pro</p>
+				</div>
+				<a class="bg-[#F97316] px-6 py-3 rounded-xl font-bold" href="{{ path('annonce.new') }}">Ajouter une annonce</a>
+			</div>
+
+			<div class="grid md:grid-cols-4 gap-5 mb-8">
+				<div class="bg-[#222222] border border-[#333] rounded-2xl p-6">
+					<p class="text-gray-500 text-sm">Annonces</p>
+				</div>
+			</div>
+		</main>
+	</div>
+{% endblock %}

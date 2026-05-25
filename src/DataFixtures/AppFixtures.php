@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Vehicle;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -23,25 +23,18 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        // Vehicle
-        for ($i = 0; $i < 5; $i++) { 
-            $vehicle = new Vehicle();
-            $vehicle->setTitle($this->faker->title())
-            ->setPrice(mt_rand(10000000, 500000000))
-            ->setBrand($this->faker->word())
-            ->setModel($this->faker->word())
-            ->setYear($this->faker->year())
-            ->setMileage(mt_rand(10000, 100000))
-            ->setFuelType($this->faker->word())
-            ->setTransmission($this->faker->word())
-            ->setColor($this->faker->colorName())
-            ->setDescription($this->faker->text())
-            ->setVehicleCondition($this->faker->word())
-            ->setCity($this->faker->city());
+        // User
+        for ($i = 0; $i < 10; $i++) { 
+            $user = new User();
+            $user-> setFullName($this->faker->firstName() . " " . lcfirst($this->faker->name()))
+            ->setEmail($this->faker->email())
+            ->setRoles(['ROLE_USER'])
+            ->setPlaintextPassword('password');
 
-            $manager-> persist($vehicle);
+            $manager->persist($user);
         }
-
+    
         $manager->flush();
+
     }
 }
