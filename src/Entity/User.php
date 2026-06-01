@@ -54,6 +54,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Seller $seller = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -215,4 +218,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getSeller(): ?Seller
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(Seller $seller): static
+    {
+        // set the owning side of the relation if necessary
+        if ($seller->getUser() !== $this) {
+            $seller->setUser($this);
+        }
+
+        $this->seller = $seller;
+
+        return $this;
+    }
+
 }

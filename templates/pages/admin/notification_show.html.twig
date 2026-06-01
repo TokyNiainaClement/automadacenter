@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Détail Notification - AutoMadaCenter
+{% endblock %}
+
+{% block body %}
+
+	<div
+		class="min-h-screen bg-[#1a1a1a] text-white p-6">
+
+		<!-- TOP -->
+		<div class="flex items-center justify-between mb-6">
+
+			<div>
+
+				<a href="{{ path('admin.notification.index') }}" class="text-sm text-[#F97316] hover:text-[#ffb066] transition mb-2 inline-flex items-center gap-2">
+
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+
+					</svg>
+					Retour aux notifications
+				</a>
+
+				<h1 class="text-2xl font-bold mt-2">
+					Détail de la demande vendeur
+				</h1>
+
+				<p class="text-gray-500 text-sm mt-1">
+					Vérification complète du profil professionnel
+				</p>
+
+			</div>
+
+			<span class="bg-[#F97316]/10 text-[#F97316] text-xs px-3 py-2 rounded-lg font-semibold">
+				En attente d'audit
+			</span>
+
+		</div>
+
+		<!-- MAIN -->
+		<div
+			class="grid grid-cols-3 gap-6">
+
+			<!-- LEFT -->
+			<div
+				class="col-span-2 space-y-6">
+
+				<!-- SOCIETE -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-6">
+
+					<div class="flex items-center gap-4 mb-6">
+
+						<div class="w-16 h-16 rounded-xl bg-[#F97316]/10 flex items-center justify-center">
+
+							<svg class="w-8 h-8 text-[#F97316]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/>
+
+							</svg>
+
+						</div>
+
+						<div>
+
+							<h2 class="text-xl font-bold">
+								{{ seller.companyName }}
+							</h2>
+
+							<p class="text-gray-500 text-sm mt-1">
+								Compte professionnel soumis pour validation
+							</p>
+
+						</div>
+
+					</div>
+
+					<div class="grid grid-cols-2 gap-5">
+
+						<div>
+							<p class="text-gray-500 text-xs mb-2">
+								EMAIL
+							</p>
+
+							<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm">
+								{{ seller.email }}
+							</div>
+						</div>
+
+						<div>
+							<p class="text-gray-500 text-xs mb-2">
+								TÉLÉPHONE
+							</p>
+
+							<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm">
+								{{ seller.phoneNumber }}
+							</div>
+						</div>
+
+						<div>
+							<p class="text-gray-500 text-xs mb-2">
+								ADRESSE
+							</p>
+
+							<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm">
+								{{ seller.adresse }}
+							</div>
+						</div>
+
+						<div>
+							<p class="text-gray-500 text-xs mb-2">
+								DATE DE DEMANDE
+							</p>
+
+							<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 text-sm">
+								{{ seller.createdAt|date('d/m/Y') }}
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+				<!-- DESCRIPTION -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-6">
+
+					<h2 class="text-lg font-bold mb-4">
+						Description de l'activité
+					</h2>
+
+					<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-4 text-sm text-gray-300 leading-relaxed">
+
+						Nous sommes spécialisés dans la vente de véhicules d'occasion haut de gamme à Madagascar.
+																	Notre entreprise propose également des services de reprise, financement et livraison.
+
+					</div>
+
+				</div>
+
+				<!-- DOCUMENT -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-6">
+
+					<h2 class="text-lg font-bold mb-4">
+						Document justificatif
+					</h2>
+
+					<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 flex items-center justify-between">
+
+						<div class="flex items-center gap-4">
+
+							<div class="w-12 h-12 rounded-lg bg-red-500/10 flex items-center justify-center">
+
+								<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7V3m10 4V3m-9 8h8m-8 4h5m5 5H6a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v11a2 2 0 01-2 2z"/>
+
+								</svg>
+
+							</div>
+
+							<div>
+
+								<h3 class="font-semibold text-sm">
+									{{ seller.verificationDocument }}
+								</h3>
+
+								<p class="text-gray-500 text-xs mt-1">
+									Document ajouté par le vendeur
+								</p>
+
+							</div>
+
+						</div>
+
+						<a href="{{ path('admin.document.show', { id:seller.id }) }}" class="bg-[#F97316] hover:bg-[#ea6500] transition px-4 py-2 rounded-lg text-sm font-semibold">
+							Voir document
+						</a>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<!-- RIGHT -->
+			<div
+				class="space-y-6">
+
+				<!-- STATUS -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-5">
+
+					<h2 class="text-base font-bold mb-4">
+						État du dossier
+					</h2>
+
+					<div class="space-y-3">
+
+						<div class="flex items-center gap-3">
+
+							<div class="w-3 h-3 rounded-full bg-green-500"></div>
+
+							<p class="text-sm">
+								Demande reçue
+							</p>
+
+						</div>
+
+						<div class="flex items-center gap-3">
+
+							<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+
+							<p class="text-sm">
+								En attente de validation
+							</p>
+
+						</div>
+
+						<div class="flex items-center gap-3 opacity-40">
+
+							<div class="w-3 h-3 rounded-full bg-gray-500"></div>
+
+							<p class="text-sm">
+								Compte vérifié
+							</p>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<!-- ACTIONS -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-5">
+
+					<h2 class="text-base font-bold mb-4">
+						Actions administrateur
+					</h2>
+
+					<div class="space-y-3">
+
+						<a href="{{ path('admin.notification.confirm', { id:seller.id }) }}" class="w-full bg-green-500 hover:bg-green-600 transition py-3 rounded-lg text-sm font-semibold flex items-center justify-center">
+							Valider le vendeur
+						</a>
+
+						<a href="{{ path('admin.notification.delete', { id:seller.id }) }}" class="w-full border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition py-3 rounded-lg text-sm font-semibold flex items-center justify-center">
+							Rejeter la demande
+						</a>
+
+						<button class="w-full bg-[#1a1a1a] border border-[#333] hover:bg-[#222] transition py-3 rounded-lg text-sm font-semibold">
+							Contacter le vendeur
+						</button>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+{% endblock %}

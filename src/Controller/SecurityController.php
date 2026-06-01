@@ -17,7 +17,7 @@ final class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if($this->getUser()) {
-            return $this->redirectToRoute('annonce.index');
+            return $this->redirectToRoute('home.index');
         }
 
         return $this->render('pages/security/login.html.twig', [
@@ -37,7 +37,7 @@ final class SecurityController extends AbstractController
     EntityManagerInterface $manager): Response
     {
         if($this->getUser()) {
-            return $this->redirectToRoute('annonce.index');
+            return $this->redirectToRoute('home.index');
         }
 
         $user = new User();

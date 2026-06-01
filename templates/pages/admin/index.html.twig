@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	AutoMadaCenter - Tableau de bord Administrateur
+{% endblock %}
+
+{% block body %}
+	<div
+		class="min-h-screen bg-[#1a1a1a] text-white p-6 text-sm">
+		<!-- HEADER -->
+		<div class="bg-[#111111] rounded-lg px-6 py-5 mb-6 flex items-center justify-between">
+			<div>
+				<h1 class="text-2xl font-bold">
+					Panel d'Administration Automadacenter
+				</h1>
+
+				<p class="text-gray-500 mt-1 text-sm">
+					Gestion complète des vendeurs professionnels et des annonces
+				</p>
+			</div>
+
+			<!-- STATUS -->
+			<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3">
+				<div class="flex items-center gap-3">
+					<div class="w-3 h-3 rounded-full bg-green-500"></div>
+
+					<div>
+						<p class="text-xs text-gray-500">Status</p>
+						<h3 class="font-bold text-green-400 text-sm">
+							Super Administrateur Actif
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- STATS -->
+		<div class="grid grid-cols-4 gap-4 mb-8">
+			<div class="bg-[#111111] rounded-lg p-4">
+				<p class="text-gray-500 text-xs uppercase mb-2">Vendeurs Pro</p>
+				<h2 class="text-3xl font-bold">48</h2>
+				<p class="text-[#F97316] mt-2 text-xs">Comptes enregistrés</p>
+			</div>
+
+			<div class="bg-[#111111] rounded-lg p-4">
+				<p class="text-gray-500 text-xs uppercase mb-2">Vendeurs Vérifiés</p>
+				<h2 class="text-3xl font-bold">36</h2>
+				<p class="text-green-400 mt-2 text-xs">Validés par audit</p>
+			</div>
+
+			<div class="bg-[#111111] rounded-lg p-4">
+				<p class="text-gray-500 text-xs uppercase mb-2">Véhicules Publiés</p>
+				<h2 class="text-3xl font-bold">157</h2>
+				<p class="text-[#F97316] mt-2 text-xs">Annonces en ligne</p>
+			</div>
+
+			<div class="bg-[#111111] rounded-lg p-4">
+				<p class="text-gray-500 text-xs uppercase mb-2">
+					Discussions Actives
+				</p>
+				<h2 class="text-3xl font-bold">92</h2>
+				<p class="text-blue-400 mt-2 text-xs">Messagerie en cours</p>
+			</div>
+		</div>
+
+		<!-- DEMANDES -->
+		<div
+			class="bg-[#111111] rounded-lg p-6">
+			<!-- TITLE -->
+			<div class="flex items-center gap-4 mb-6">
+				<div class="w-12 h-12 rounded-lg bg-[#F97316]/10 flex items-center justify-center">
+					<svg class="w-6 h-6 text-[#F97316]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+					</svg>
+				</div>
+
+				<div>
+					<h2 class="text-xl font-bold">
+						Demandes d'inscription Vendeurs Pro
+					</h2>
+					<p class="text-gray-500 mt-1 text-sm">en attente d'audit</p>
+				</div>
+			</div>
+
+			<!-- LISTE -->
+			{# {% for demande in demandes %}
+				<div class="space-y-4 mb-3">
+					<div
+						class="bg-[#181818] rounded-lg p-4 flex justify-between items-center">
+						<!-- INFOS -->
+						<div>
+							<a href="#">
+								<h3 class="text-lg text-[#ffcc5c] hover:text-[#feb619] font-bold mb-2">{{ demande.companyName }}</h3>
+							</a>
+
+							<div class="space-y-1 text-gray-400 text-sm">
+								<p>
+									<span class="text-white font-semibold">Email :</span>
+									{{ demande.email }}
+								</p>
+
+								<p>
+									<span class="text-white font-semibold">Siège social :</span>
+									{{ demande.adresse }}
+								</p>
+
+								<div class="flex items-center gap-3 mt-2">
+									<p>
+										<span class="text-white font-semibold">Pièce justificative :</span>
+										{{ demande.verificationDocument }}
+									</p>
+
+									<button class="bg-[#2a2a2a] hover:bg-[#333] transition px-3 py-1.5 rounded-lg text-xs font-semibold">
+										Voir
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- ACTIONS -->
+						<div class="flex items-center gap-3">
+							<a href="{{ path('admin.request.confirm', { id:demande.id }) }}" class="bg-green-500 hover:bg-green-600 transition px-4 py-2 
+							rounded-lg font-semibold text-sm flex items-center gap-2">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+								</svg>
+								Valider
+							</a>
+
+							<a href="{{ path('admin.request.delete', { id:demande.id }) }}" class="border border-[#ff8080] text-[#ff8080] hover:bg-[#ff8080] hover:text-white transition px-4 py-2 rounded-lg font-semibold text-sm flex items-center gap-2">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+								</svg>
+								Rejeter
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %} #}
+		</div>
+	</div>
+{% endblock %}

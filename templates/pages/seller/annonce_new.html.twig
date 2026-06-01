@@ -6,7 +6,7 @@
 
 {% block body %}
 	<div class="max-w-5xl mx-auto bg-[#222222] border border-[#333] rounded-2xl p-8 my-5">
-		<h1 class="text-4xl font-black mb-8">Ajouter une annonce</h1>
+		<h1 class="text-xl font-black mb-8">Ajouter une annonce</h1>
 
 		{{ form_start(form) }}
 		<div class="grid md:grid-cols-2 gap-5">
@@ -73,7 +73,16 @@
 		<div class="grid md:grid-cols-2 gap-5">
 			<div class="grid md:columns-1">
 				{{ form_label(form.imageFile) }}
-				{{ form_widget(form.imageFile) }}
+				<label class="flex items-center gap-4 w-full border-2 mt-2 border-dashed border-[#333] rounded-xl px-4 py-4 cursor-pointer hover:border-[#F97316] hover:bg-[#f974161d] transition group">
+					<span class="shrink-0 w-10 h-10 rounded-full bg-[#3b3a30]/8 flex items-center justify-center text-[#3b3a30] group-hover:bg-[#ffcc5c]/20 transition">
+						📷
+					</span>
+					<span class="flex flex-col gap-0.5">
+						<span class="text-sm font-medium text-gray-400">Choisir une image</span>
+						<span class="text-xs text-gray-400">PNG, JPG, WEBP — max 2 Mo</span>
+					</span>
+					{{ form_widget(form.imageFile) }}
+				</label>
 			</div>
 		</div>
 

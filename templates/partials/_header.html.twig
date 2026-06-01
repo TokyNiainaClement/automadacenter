@@ -1,5 +1,5 @@
 <!-- Simulation bar -->
-<div class="bg-[#0f0f0f] border-b border-[#2a2a2a] px-4 py-1.5 flex items-center gap-3 flex-wrap">
+<div class="bg-[#0f0f0f] px-4 py-1.5 flex items-center gap-3 flex-wrap">
 	<span class="text-gray-500 text-xs">Simulation Active – Tester différents profils d'utilisateurs :</span>
 	<span class="bg-[#F97316] text-white text-[11px] font-bold px-3 py-0.5 rounded">Acheteur / Visiteur</span>
 	<span class="text-gray-500 text-xs">Vendeur Pro :</span>
@@ -12,33 +12,35 @@
 
 <!-- Navbar -->
 <nav
-	class="bg-[#111111] border-b border-[#2a2a2a] px-6 py-3 flex items-center justify-between sticky top-0 z-50">
+	class="bg-[#111111] px-6 py-3 flex items-center justify-between sticky top-0 z-50">
 	<!-- Logo -->
-	<div class="flex items-center gap-2.5">
-		<div class="bg-[#F97316] rounded-md p-1.5 flex items-center justify-center">
-			<svg width="22" height="22" viewbox="0 0 38 38" fill="none">
-				<circle cx="19" cy="19" r="17" stroke="white" stroke-width="2.5"/>
-				<text x="5" y="27" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="18" fill="white">AC</text>
-			</svg>
-		</div>
-		<div>
-			<div class="font-condensed font-black text-[18px] leading-tight tracking-tight">
-				<span class="text-white">auto</span>
-				<span class="text-[#F97316]">mada</span>
-				<span class="text-white">center</span>
+	{% if app.current_route == 'home.index' or app.current_route == 'seller.new' %}
+		<div class="flex items-center gap-2.5">
+			<div class="bg-[#F97316] rounded-md p-1.5 flex items-center justify-center">
+				<svg width="22" height="22" viewbox="0 0 38 38" fill="none">
+					<circle cx="19" cy="19" r="17" stroke="white" stroke-width="2.5"/>
+					<text x="5" y="27" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="18" fill="white">AC</text>
+				</svg>
 			</div>
-			<div class="text-gray-500 font-barlow font-medium tracking-[2px] uppercase" style="font-size:9px">Voitures &amp; Motos d'Occasion</div>
+			<div>
+				<div class="font-condensed font-black text-[18px] leading-tight tracking-tight">
+					<span class="text-white">auto</span>
+					<span class="text-[#F97316]">mada</span>
+					<span class="text-white">center</span>
+				</div>
+				<div class="text-gray-500 font-barlow font-medium tracking-[2px] uppercase" style="font-size:9px">Voitures &amp; Motos d'Occasion</div>
+			</div>
 		</div>
-	</div>
+	{% endif %}
+
 	<!-- Nav links -->
-	<div class="flex items-center gap-6">
-		<a href="{{ path('annonce.index') }}" class="flex items-center gap-1.5 text-[#F97316] text-sm font-semibold">
-			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
-			Annonces
-		</a>
-		<a href="#" class="flex items-center gap-1.5 text-[#F97316] text-sm font-semibold">
-			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg>
-			Gallerie
+	<div class="flex items-center gap-6 ml-auto">
+		<a href="{{ path('home.index') }}" class="flex items-center gap-1.5 text-sm font-semibold {{ app.current_route == 'home.index' ? 'text-[#F97316]' : '' }}">
+			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1
+																															1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+			</svg>
+			Acceuil
 		</a>
 		<a href="#" class="flex items-center gap-1 text-gray-300 text-sm font-medium hover:text-[#F97316] transition-colors relative">
 			<svg class="w-4 h-4 fill-[#F97316] text-[#F97316]" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -49,9 +51,35 @@
 			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
 			Messages
 		</a>
-		<a href="#" class="bg-[#F97316] hover:bg-[#ea6500] text-white text-sm font-bold px-4 py-2 rounded-md flex items-center gap-2 transition-colors">
-			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-			Devenir Vendeur Pro
-		</a>
+		{% if app.user %}
+
+			{# Si l'utilisateur connecté à déjà envoyé une demande d'inscription #}
+			{% if app.user.seller and app.current_route != 'seller.index' %}
+			<a href="{{ path('seller.index') }}" class="flex items-center gap-1.5 text-gray-300 text-sm font-medium hover:text-[#F97316] transition-colors">
+				Dashboard
+			</a>
+			{% endif %}
+
+			{# Bouton uniquement pour les utilisateurs simple ou client #}
+			{% if app.user.seller == null and app.current_route != 'seller.new' and app.current_route != 'seller.index' %}
+				<a href="{{ path('seller.new') }}" class="bg-[#F97316] hover:bg-[#ea6500] text-white text-sm font-bold px-4 py-2 rounded-md flex items-center gap-2 transition-colors">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+					Devenir Vendeur Pro
+				</a>
+			{% endif %}
+
+			{# Bouton déconnecter #}
+			<a href="{{ path('security.logout') }}" class="border border-red-500 text-red-500 text-sm font-bold px-4 py-2 rounded-md flex items-center gap-2 transition-colors">
+				Déconnexion
+			</a>
+
+		{% else %}
+			<a href="{{ path('security.login') }}" class="bg-[#F97316] hover:bg-[#ea6500] text-white text-sm font-bold px-4 py-2 rounded-md flex items-center gap-2 transition-colors">
+				Se connecter
+			</a>
+			<a href="{{ path('security.registration') }}" class="border border-[#ea6500] text-[#ea6500] text-sm font-bold px-4 py-2 rounded-md flex items-center gap-2 transition-colors">
+				S'inscrire
+			</a>
+		{% endif %}
 	</div>
 </nav>

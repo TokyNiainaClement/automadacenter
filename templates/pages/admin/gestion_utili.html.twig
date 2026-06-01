@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs - Admin
+{% endblock %}
+
+{% block body %}
+	<div
+		class="ml-64 min-h-screen bg-[#1a1a1a] text-white p-6">
+
+		<!-- HEADER -->
+		<div class="mb-6">
+			<h1 class="text-2xl font-bold">Gestion des utilisateurs</h1>
+			<p class="text-gray-500 text-sm mt-1">
+				Administration des vendeurs et utilisateurs de la plateforme
+			</p>
+		</div>
+
+		<!-- ===================== VENDEURS ===================== -->
+		<div class="bg-[#111111] rounded-lg p-5 mb-10">
+
+			<h2 class="text-lg font-bold mb-4">Vendeurs professionnels</h2>
+
+			<table class="w-full text-sm">
+				<thead class="text-gray-400 border-b border-[#2a2a2a]">
+					<tr>
+						<th class="text-left py-3">Concessionnaire</th>
+						<th class="text-left py-3">Contact</th>
+						<th class="text-left py-3">Statut</th>
+						<th class="text-left py-3">Actions</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<!-- FAKE DATA -->
+					<tr class="border-b border-[#1f1f1f]">
+						<td class="py-3 font-semibold">Madagascar Auto Pro</td>
+						<td class="py-3 text-gray-400">madaautopro@gmail.com</td>
+						<td class="py-3">
+							<span class="bg-green-600/20 text-green-400 px-3 py-1 rounded text-xs">
+								Vérifié
+							</span>
+						</td>
+						<td class="py-3 flex gap-2">
+							<button class="bg-red-500/10 text-red-400 px-3 py-1 rounded text-xs">
+								Suspendre
+							</button>
+						</td>
+					</tr>
+
+					<tr class="border-b border-[#1f1f1f]">
+						<td class="py-3 font-semibold">Auto Import Tana</td>
+						<td class="py-3 text-gray-400">contact@autoimport.mg</td>
+						<td class="py-3">
+							<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded text-xs">
+								En attente
+							</span>
+						</td>
+						<td class="py-3 flex gap-2">
+							<button class="bg-green-500/10 text-green-400 px-3 py-1 rounded text-xs">
+								Approuver
+							</button>
+							<button class="bg-red-500/10 text-red-400 px-3 py-1 rounded text-xs">
+								Rejeter
+							</button>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+		<!-- ===================== USERS ===================== -->
+		<div class="bg-[#111111] rounded-lg p-5">
+
+			<h2 class="text-lg font-bold mb-4">Utilisateurs</h2>
+
+			<table class="w-full text-sm">
+				<thead class="text-gray-400 border-b border-[#2a2a2a]">
+					<tr>
+						<th class="text-left py-3">Nom</th>
+						<th class="text-left py-3">Email</th>
+						<th class="text-left py-3">Type</th>
+						<th class="text-left py-3">Statut compte</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<tr class="border-b border-[#1f1f1f]">
+						<td class="py-3 font-semibold">Rakoto Jean</td>
+						<td class="py-3 text-gray-400">jean@gmail.com</td>
+						<td class="py-3">
+							<span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded text-xs">
+								Client
+							</span>
+						</td>
+						<td class="py-3 text-gray-400">Actif</td>
+					</tr>
+
+					<tr class="border-b border-[#1f1f1f]">
+						<td class="py-3 font-semibold">Madagascar Auto Pro</td>
+						<td class="py-3 text-gray-400">madaautopro@gmail.com</td>
+						<td class="py-3">
+							<span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded text-xs">
+								Vendeur vérifié
+							</span>
+						</td>
+						<td class="py-3 text-gray-400">Actif</td>
+					</tr>
+
+					<tr class="border-b border-[#1f1f1f]">
+						<td class="py-3 font-semibold">Auto Import Tana</td>
+						<td class="py-3 text-gray-400">contact@autoimport.mg</td>
+						<td class="py-3">
+							<span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded text-xs">
+								En attente vendeur
+							</span>
+						</td>
+						<td class="py-3 text-gray-400">En vérification</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+{% endblock %}

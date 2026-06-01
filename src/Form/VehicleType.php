@@ -29,7 +29,7 @@ class VehicleType extends AbstractType
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(min: 10, max: 255)
-                ]
+                ],
             ])
             ->add('price', MoneyType::class, [
                 'attr' => [
@@ -157,7 +157,7 @@ class VehicleType extends AbstractType
             ->add('city', TextType::class, [
                 'attr' => [
                     'class' => 'bg-[#111111] border border-[#333] 
-                    rounded-xl px-4 py-3 mt-2 outline-none focus:border-[#F97316',
+                    rounded-xl px-4 py-3 mt-2 outline-none focus:border-[#F97316]',
                     'placeholder' => 'Ex: Antananarivo, Toamasina, etc'
                 ],
                 'label' => 'Localisation',
@@ -171,8 +171,7 @@ class VehicleType extends AbstractType
             ])
             ->add('imageFile', VichImageType::class, [
                 'attr' => [
-                    'class' => 'border border-[#333] 
-                    rounded-xl px-4 py-3 mt-2 outline-none focus:border-[#F97316'
+                    'class' => 'sr-only'
                 ],
                 'label' => 'Photo',
                 'label_attr' => [

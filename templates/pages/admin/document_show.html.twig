@@ -1,0 +1,210 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Document justificatif - AutoMadaCenter
+{% endblock %}
+
+{% block body %}
+
+	<div
+		class="min-h-screen bg-[#1a1a1a] text-white p-6">
+
+		<!-- TOP -->
+		<div class="flex items-center justify-between mb-6">
+
+			<div>
+
+				<a href="{{ path('admin.notification.show', { id:seller.id }) }}" class="text-sm text-[#F97316] hover:text-[#ffb066] transition inline-flex items-center gap-2 mb-2">
+
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+
+					</svg>
+
+					Retour à la demande
+
+				</a>
+
+				<h1 class="text-2xl font-bold mt-2">
+					Document justificatif vendeur
+				</h1>
+
+				<p class="text-gray-500 text-sm mt-1">
+					Vérification du document fourni par le vendeur professionnel
+				</p>
+
+			</div>
+
+			<div class="bg-[#111111] border border-[#2a2a2a] rounded-lg px-4 py-3">
+
+				<p class="text-xs text-gray-500">
+					Document reçu
+				</p>
+
+				<h3 class="text-sm font-semibold text-green-400 mt-1">
+					{{ seller.verificationDocument }}
+				</h3>
+
+			</div>
+
+		</div>
+
+		<!-- MAIN -->
+		<div
+			class="grid grid-cols-4 gap-6">
+
+			<!-- DOCUMENT -->
+			<div class="col-span-3">
+
+				<div
+					class="bg-[#111111] border border-[#222] rounded-2xl p-4">
+
+					<!-- PDF HEADER -->
+					<div class="flex items-center justify-between mb-4 pb-4 border-b border-[#222]">
+
+						<div class="flex items-center gap-3">
+
+							<div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
+
+								<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7V3m10 4V3m-9 8h8m-8 4h5m5 5H6a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v11a2 2 0 01-2 2z"/>
+
+								</svg>
+
+							</div>
+
+							<div>
+
+								<h2 class="font-bold text-sm">
+									{{ seller.verificationDocument }}
+								</h2>
+
+								<p class="text-xs text-gray-500 mt-1">
+									Document administratif officiel
+								</p>
+
+							</div>
+
+						</div>
+
+						<a href="{{ vich_uploader_asset(seller, 'documentFile') }}" class="bg-[#F97316] hover:bg-[#ea6500] transition px-4 py-2 rounded-lg text-sm font-semibold">
+							Télécharger
+						</a>
+
+					</div>
+
+					<!-- DOCUMENT VIEW -->
+					<div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden h-[850px]">
+
+						<iframe src="{{ vich_uploader_asset(seller, 'documentFile') }}" class="w-full h-full"></iframe>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<!-- SIDE -->
+			<div
+				class="space-y-5">
+
+				<!-- SELLER -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-5">
+
+					<h2 class="text-base font-bold mb-4">
+						Informations vendeur
+					</h2>
+
+					<div class="space-y-4">
+
+						<div>
+
+							<p class="text-xs text-gray-500 mb-1">
+								ENTREPRISE
+							</p>
+
+							<h3 class="text-sm font-semibold">
+								{{ seller.companyName }}
+							</h3>
+
+						</div>
+
+						<div>
+
+							<p class="text-xs text-gray-500 mb-1">
+								EMAIL
+							</p>
+
+							<h3 class="text-sm font-semibold">
+								{{ seller.email }}
+							</h3>
+
+						</div>
+
+						<div>
+
+							<p class="text-xs text-gray-500 mb-1">
+								LOCALISATION
+							</p>
+
+							<h3 class="text-sm font-semibold">
+								{{ seller.adresse }}
+							</h3>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<!-- ANALYSE -->
+				<div class="bg-[#111111] border border-[#222] rounded-xl p-5">
+
+					<h2 class="text-base font-bold mb-4">
+						Analyse du document
+					</h2>
+
+					<div class="space-y-3">
+
+						<div class="flex items-center gap-3">
+
+							<div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+
+							<p class="text-sm">
+								Document lisible
+							</p>
+
+						</div>
+
+						<div class="flex items-center gap-3">
+
+							<div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+
+							<p class="text-sm">
+								Format valide
+							</p>
+
+						</div>
+
+						<div class="flex items-center gap-3">
+
+							<div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+
+							<p class="text-sm">
+								Vérification manuelle requise
+							</p>
+
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+{% endblock %}

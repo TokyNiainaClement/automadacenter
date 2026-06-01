@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	AutoMadaCenter - Inscription Vendeur
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-5xl mx-auto bg-[#222222] border border-[#333] rounded-2xl p-8 my-5">
+		<h1 class="text-xl font-black">Devenir vendeur professionnel</h1>
+		<p class="text-gray-500 mt-4 mb-4">Rejoignez les meilleurs concessionnaires professionnels de Madagascar. Publiez des annonces illimitées avec le badge
+			<span class="text-[#F97316]">Vendeur Vérifié</span>
+			après audit de votre dossier</p>
+
+		{{ form_start(form) }}
+
+		<div class="grid md:columns-1">
+			{{ form_label(form.companyName) }}
+			{{ form_widget(form.companyName) }}
+			<p>
+				{{ form_errors(form.companyName) }}
+			</p>
+		</div>
+
+		<div class="grid md:grid-cols-2 gap-5">
+			<div class="grid md:columns-1">
+				{{ form_label(form.phoneNumber) }}
+				{{ form_widget(form.phoneNumber) }}
+				<p>
+					{{ form_errors(form.phoneNumber) }}
+				</p>
+			</div>
+
+			<div class="grid md:columns-1">
+				{{ form_label(form.email) }}
+				{{ form_widget(form.email) }}
+				<p>
+					{{ form_errors(form.email) }}
+				</p>
+			</div>
+		</div>
+
+		<div class="grid md:columns-1">
+			<div class="grid md:columns-1">
+				{{ form_label(form.adresse) }}
+				{{ form_widget(form.adresse) }}
+				<p>
+					{{ form_errors(form.adresse) }}
+				</p>
+
+			</div>
+		</div>
+
+		<div class="grid md:grid-cols-2 gap-5">
+			<div class="grid md:columns-1">
+				{{ form_label(form.documentFile) }}
+				{{ form_widget(form.documentFile) }}
+				<p>
+					{{ form_errors(form.documentFile) }}
+				</p>
+			</div>
+			<div class="grid md:columns-1">
+				{{ form_label(form.logoFile) }}
+				{{ form_widget(form.logoFile) }}
+				<p>
+					{{ form_errors(form.logoFile) }}
+				</p>
+			</div>
+		</div>
+
+		<div>
+			{{ form_row(form.submit) }}
+		</div>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

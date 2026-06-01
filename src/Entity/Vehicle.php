@@ -79,8 +79,6 @@ class Vehicle
     #[Assert\Length(min: 3, max: 100)]
     private ?string $city = null;
 
-    // ... other fields
-
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
     #[Vich\UploadableField(mapping: 'car_images', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;

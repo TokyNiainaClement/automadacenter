@@ -5,46 +5,179 @@
 {% endblock %}
 
 {% block body %}
-	<div class="grid grid-cols-[260px_1fr] min-h-screen">
-		<aside class="bg-[#111111] border-r border-[#333] p-6">
-			<h1 class="text-2xl font-black mb-10">
-				<span class="text-white">auto</span>
-				<span class="text-[#F97316]">mada</span>
-			</h1>
+	<div class="min-h-screen bg-[#1a1a1a] text-white text-sm">
 
-			<nav class="space-y-3">
-				<a href="#" class="block bg-[#F97316] px-4 py-3 rounded-xl font-semibold">
-					Dashboard
-				</a>
+		<main
+			class="p-6">
 
-				<a href="#" class="block bg-[#222222] hover:bg-[#2d2d2d] px-4 py-3 rounded-xl">
-					Mes annonces
-				</a>
+			<!-- HEADER -->
+			<div class="bg-[#111111] rounded-lg px-6 py-5 mb-6 flex items-center justify-between">
 
-				<a href="#" class="block bg-[#222222] hover:bg-[#2d2d2d] px-4 py-3 rounded-xl">
-					Messages
-				</a>
+				<div
+					class="flex items-center gap-4">
 
-				<a href="#" class="block bg-[#222222] hover:bg-[#2d2d2d] px-4 py-3 rounded-xl">
-					Statistiques
-				</a>
-			</nav>
-		</aside>
+					<!-- Logo entreprise -->
+					<div class="w-16 h-16 rounded-full bg-[#1a1a1a] border border-[#222] flex items-center justify-center overflow-hidden">
+						<img src="{{ vich_uploader_asset(seller, 'logoFile') }}" class="w-full h-full object-cover" alt="">
+					</div>
 
-		<main class="p-8">
-			<div class="flex justify-between items-center mb-8">
-				<div>
-					<h2 class="text-4xl font-black">Dashboard vendeur</h2>
-					<p class="text-gray-500 mt-2">Bienvenue Madagascar Auto Pro</p>
+					<!-- Infos -->
+					<div>
+						<h2 class="text-xl font-bold">
+							{{ seller.companyName }}
+						</h2>
+
+						<div class="flex items-center gap-2 mt-1">
+							{% if seller.status == 'verified' %}
+								<div class="w-2 h-2 rounded-full bg-green-500"></div>
+
+								<p class="text-gray-400 text-sm">
+									Compte professionnel • Vérifié
+								</p>
+							{% elseif seller.status == 'pending' %}
+								<div class="w-2 h-2 rounded-full bg-blue-400"></div>
+
+								<p class="text-gray-400 text-sm">
+									Compte professionnel • En attente
+								</p>
+
+							{% else %}
+							<div class="w-2 h-2 rounded-full bg-red-500"></div>
+
+								<p class="text-gray-400 text-sm">
+									Compte professionnel • Réfusé
+								</p>
+							{% endif %}
+						</div>
+
+					</div>
+
 				</div>
-				<a class="bg-[#F97316] px-6 py-3 rounded-xl font-bold" href="{{ path('annonce.new') }}">Ajouter une annonce</a>
+
+				{% if seller.status == 'verified' %}
+					<!-- Bouton -->
+					<a class="bg-[#F97316] hover:bg-[#ea6500] transition px-5 py-3 rounded-lg font-semibold text-sm" href="{{ path('annonce.new') }}">
+						Ajouter une annonce
+					</a>
+				{% endif %}
 			</div>
 
-			<div class="grid md:grid-cols-4 gap-5 mb-8">
-				<div class="bg-[#222222] border border-[#333] rounded-2xl p-6">
-					<p class="text-gray-500 text-sm">Annonces</p>
+			<!-- STATS -->
+			<div class="grid grid-cols-3 gap-4 mb-8">
+
+				<div class="bg-[#111111] rounded-lg p-4">
+					<p class="text-gray-500 text-xs uppercase mb-2">Total vues</p>
+					<h3 class="text-2xl font-bold">2097</h3>
+					<p class="text-[#F97316] mt-2 text-xs">+12% ce mois</p>
 				</div>
+
+				<div class="bg-[#111111] rounded-lg p-4">
+					<p class="text-gray-500 text-xs uppercase mb-2">Messages reçus</p>
+					<h3 class="text-2xl font-bold">18</h3>
+					<p class="text-[#F97316] mt-2 text-xs">5 nouveaux prospects</p>
+				</div>
+
+				<div class="bg-[#111111] rounded-lg p-4">
+					<p class="text-gray-500 text-xs uppercase mb-2">Annonces actives</p>
+					<h3 class="text-2xl font-bold">2</h3>
+					<p class="text-[#F97316] mt-2 text-xs">En ligne actuellement</p>
+				</div>
+
 			</div>
+
+			<!-- ANNONCES -->
+			<div class="mb-6">
+
+				<h2 class="text-xl font-bold mb-5">
+					Vos annonces publiées
+				</h2>
+
+				<div
+					class="space-y-4">
+
+					<!-- CARD 1 -->
+					<div class="bg-[#111111] border border-[#1d1d1d] rounded-lg px-4 py-4 flex items-center justify-between">
+
+						<div class="flex items-center gap-4">
+
+							<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=300" class="w-20 h-16 rounded-xl object-cover" alt="">
+
+							<div>
+
+								<h3 class="text-lg font-bold">
+									Peugeot 3008 GT Line
+								</h3>
+
+								<p class="text-[#F97316] font-semibold text-base">
+									68 000 000 MGA
+								</p>
+
+								<p class="text-gray-500 text-xs mt-1">
+									2020 • 45 000 km • Antananarivo
+								</p>
+
+							</div>
+
+						</div>
+
+						<div class="flex items-center gap-2">
+
+							<button class="bg-[#2a2a2a] hover:bg-[#333] transition px-4 py-2 rounded-lg text-sm font-semibold">
+								Prévisualiser
+							</button>
+
+							<button class="bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition px-4 py-2 rounded-lg text-sm font-semibold">
+								Supprimer
+							</button>
+
+						</div>
+
+					</div>
+
+					<!-- CARD 2 -->
+					<div class="bg-[#111111] border border-[#1d1d1d] rounded-lg px-4 py-4 flex items-center justify-between">
+
+						<div class="flex items-center gap-4">
+
+							<img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300" class="w-20 h-16 rounded-xl object-cover" alt="">
+
+							<div>
+
+								<h3 class="text-lg font-bold">
+									Toyota Hilux Revo Double Cabine
+								</h3>
+
+								<p class="text-[#F97316] font-semibold text-base">
+									95 000 000 MGA
+								</p>
+
+								<p class="text-gray-500 text-xs mt-1">
+									2019 • 82 000 km • Antananarivo
+								</p>
+
+							</div>
+
+						</div>
+
+						<div class="flex items-center gap-2">
+
+							<button class="bg-[#2a2a2a] hover:bg-[#333] transition px-4 py-2 rounded-lg text-sm font-semibold">
+								Prévisualiser
+							</button>
+
+							<button class="bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition px-4 py-2 rounded-lg text-sm font-semibold">
+								Supprimer
+							</button>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
 		</main>
+
 	</div>
 {% endblock %}

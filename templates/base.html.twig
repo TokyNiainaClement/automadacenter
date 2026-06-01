@@ -3,8 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}
-			{% endblock %}
+			{% block title %}{% endblock %}
 		</title>
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,20 +15,90 @@
 		{% endblock %}
 	</head>
 
-	<body class="bg-[#1a1a1a] text-white">
+	<body class="bg-[#1a1a1a] text-white text-sm {{ app.current_route != 'home.index' and app.current_route != 'seller.new' ? 'flex' : '' }}">
 
 		{{ importmap('app') }}
 
-		{% block header %}
-			{% include "partials/_header.html.twig" %}
-		{% endblock %}
+		{% if app.current_route != 'home.index' and app.current_route != 'seller.new' %}
+			<!-- SIDEBAR -->
+			<aside
+				class="w-64 min-h-screen bg-[#111111] fixed left-0 top-0 p-5">
 
-		{% block body %}
-		{% endblock %}
+				<!-- LOGO -->
+				<div class="mb-8 flex items-center gap-2">
+					<div class="bg-[#F97316] rounded-md p-2 font-bold text-white">
+						AC
+					</div>
+					<span class="font-bold text-lg">
+						AutoMadaCenter
+					</span>
+				</div>
 
-		{% block footer %}
-			{% include "partials/_footer.html.twig" %}
-		{% endblock %}
+				<nav
+					class="space-y-2">
+
+					<!-- Dashboard -->
+					<a href="{{ app.current_route == 'seller.index' ? path('seller.index') : path('admin.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#222] transition {{ app.current_route == 'admin.index' or app.current_route == 'seller.index' ? 'bg-[#1a1a1a] text-[#F97316] font-semibold' : '' }}">
+
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" 
+							stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 
+							1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+						</svg>
+
+						Dashboard
+					</a>
+
+					<!-- Messages -->
+					<a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition">
+
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h6m-2 8a8 8 0 100-16 8 8 0 000 16z"/>
+						</svg>
+
+						Messages
+					</a>
+
+					<!-- Favoris -->
+					<a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1a1a1a] transition">
+
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.07 6.36a1 1 0 00.95.69h6.709c.969 0 1.371 1.24.588 1.81l-5.428 3.945a1 1 0 00-.364 1.118l2.07 6.36c.3.921-.755 1.688-1.54 1.118l-5.428-3.945a1 1 0 00-1.175 0l-5.428 3.945c-.785.57-1.84-.197-1.54-1.118l2.07-6.36a1 1 0 00-.364-1.118L2.724 11.787c-.783-.57-.38-1.81.588-1.81h6.709a1 1 0 00.95-.69l2.07-6.36z"/>
+						</svg>
+
+						Favoris
+					</a>
+
+					{# Notification #}
+					<a href="{{ path('admin.notification.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#222] transition {{ app.current_route == 'admin.notification.index' ? 'bg-[#1a1a1a] text-[#F97316] font-semibold' : '' }}">
+
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.07 6.36a1 1 0 00.95.69h6.709c.969 0 1.371 1.24.588 1.81l-5.428 3.945a1 1 0 00-.364 1.118l2.07 6.36c.3.921-.755 1.688-1.54 1.118l-5.428-3.945a1 1 0 00-1.175 0l-5.428 3.945c-.785.57-1.84-.197-1.54-1.118l2.07-6.36a1 1 0 00-.364-1.118L2.724 11.787c-.783-.57-.38-1.81.588-1.81h6.709a1 1 0 00.95-.69l2.07-6.36z"/>
+						</svg>
+
+						Notifications
+					</a>
+
+				</nav>
+
+			</aside>
+		{% endif %}
+
+
+		<!-- MAIN CONTENT -->
+		<div class="{{ app.current_route != 'home.index' and app.current_route != 'seller.new' ? 'ml-64 w-full' : ''}}">
+
+			{% block header %}
+				{% include "partials/_header.html.twig" %}
+			{% endblock %}
+
+			{% block body %}{% endblock %}
+
+			{% block footer %}
+				{% include "partials/_footer.html.twig" %}
+			{% endblock %}
+
+		</div>
 
 	</body>
 </html>
