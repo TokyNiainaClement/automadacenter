@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Seller;
+use App\Repository\AdminNotificationRepository;
 use App\Repository\SellerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,18 +28,17 @@ final class AdminController extends AbstractController
     }
 
     /**
-     * Cette méthode permet d'afficher la liste des notifications
-     * pour l'administrateur
+     * This controller allow to show the liste of admin notification
     *
-    * @param SellerRepository $repository
+    * @param AdminNotificationRepository $repository
     * @return Response
     */
     #[Route('/admin/notification', 'admin.notification.index', methods: ['GET'])]
-    public function notificationIndex(SellerRepository $repository): Response
+    public function notificationIndex(AdminNotificationRepository $repository): Response
     {
-        $sellers = $repository->findBy(['status' => 'pending']);
+        $notifications = $repository->findAll();
         return $this->render('pages/admin/notification_index.html.twig', [
-            'sellers' => $sellers
+            'notifications' => $notifications
         ]);
     }
 
@@ -77,10 +77,16 @@ final class AdminController extends AbstractController
     * @param EntityManagerInterface $manager
     * @return void
     */
-    #[Route('/admin/suppression-notification/{id}', 'admin.notification.delete', methods: ['GET'])]
-    public function notificationDelete(Seller $seller,
+    #[Route('/admin/refus-notification/{id}', 'admin.notification.refuse', methods: ['GET'])]
+    public function notificationRefuse(Seller $seller,
     EntityManagerInterface $manager)
     {
+        // Pour empêcher que les demande déjà vérifié
+        // se remettre à demande réfusé
+        if($seller->getStatus() === 'verified') {
+            return $this->redirectToRoute('admin.notification.index');
+        }
+
         $seller->setStatus('refused');
         $manager->persist($seller);
         $manager->flush();
@@ -98,6 +104,12 @@ final class AdminController extends AbstractController
     public function notificationConfirm(Seller $seller,
     EntityManagerInterface $manager): Response
     {
+        // Pour empêcher que les demande déjà réfusé
+        // se remettre à demande vérifié
+        if($seller->getStatus() === 'refused') {
+            return $this->redirectToRoute('admin.notification.index');
+        }
+
         $seller->setStatus('verified');
 
         $user = $seller->getUser();

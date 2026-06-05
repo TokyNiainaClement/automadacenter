@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SellerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,7 +12,14 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: SellerRepository::class)]
-#[UniqueEntity(fields: ['companyName', 'phoneNumber', 'email'])]
+#[UniqueEntity(
+    fields: ['companyName'],
+    message: 'Cette entreprise existe déjà.'
+)]
+#[UniqueEntity(
+    fields: ['email'],
+    message: 'Cette adresse email est déjà utilisée.'
+)]
 #[Vich\Uploadable]
 class Seller
 {
@@ -24,9 +33,9 @@ class Seller
     #[Assert\Length(min: 3, max: 50)]
     private ?string $companyName = null;
 
-    #[ORM\Column(length: 13)]
+    #[ORM\Column(length: 20)]
     #[Assert\NotBlank()]
-    #[Assert\Length(min: 13, max: 13)]
+    #[Assert\Regex('/^(032|033|034|038)\d{7}$/')]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 180)]
@@ -36,6 +45,7 @@ class Seller
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank()]
+    #[Assert\Length(min: 5, max: 255)]
     private ?string $adresse = null;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
@@ -67,10 +77,17 @@ class Seller
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, AdminNotification>
+     */
+    #[ORM\OneToMany(targetEntity: AdminNotification::class, mappedBy: 'seller', orphanRemoval: true)]
+    private Collection $adminNotifications;
+
     public function __construct()
     {
         $this->updatedAt = new \DateTimeImmutable();
         $this->createdAt = new \DateTimeImmutable();
+        $this->adminNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -240,6 +257,36 @@ class Seller
     public function setUser(User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AdminNotification>
+     */
+    public function getAdminNotifications(): Collection
+    {
+        return $this->adminNotifications;
+    }
+
+    public function addAdminNotification(AdminNotification $adminNotification): static
+    {
+        if (!$this->adminNotifications->contains($adminNotification)) {
+            $this->adminNotifications->add($adminNotification);
+            $adminNotification->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdminNotification(AdminNotification $adminNotification): static
+    {
+        if ($this->adminNotifications->removeElement($adminNotification)) {
+            // set the owning side to null (unless already changed)
+            if ($adminNotification->getSeller() === $this) {
+                $adminNotification->setSeller(null);
+            }
+        }
 
         return $this;
     }

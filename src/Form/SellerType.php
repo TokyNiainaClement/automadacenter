@@ -6,7 +6,6 @@ use App\Entity\Seller;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,19 +33,19 @@ class SellerType extends AbstractType
                     new Assert\Length(min: 3, max: 50)
                 ]
             ])
-            ->add('phoneNumber', TelType::class, [
+            ->add('phoneNumber', TextType::class, [
                 'attr' => [
                     'class' => 'bg-[#111111] border border-[#333] 
 					rounded-xl px-4 py-3 mt-2 outline-none focus:border-[#F97316]',
-                    'placeholder' => 'Ex: +261 34 00 000 00'
+                    'placeholder' => 'Ex: 034 00 000 00, 032 00 000 00'
                 ],
                 'label' => 'numéro de téléphone *',
                 'label_attr' => [
-                    'class' => 'uppercase mt-6'
+                    'class' => 'uppercase'
                 ],
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(min: 13, max: 13)
+                    new Assert\Regex('/^(032|033|034|038)\d{7}$/')
                 ]
 
             ])
@@ -76,14 +75,16 @@ class SellerType extends AbstractType
                 'label_attr' => [
                     'class' => 'uppercase mt-6'
                 ],
-                'constraints' => new Assert\NotBlank()
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(min: 5, max: 255)
+                ]
             ])
             ->add('documentFile', VichFileType::class, [
                 'attr' => [
-                    'class' => 'bg-[#111111] border border-[#333]
-						        rounded-xl px-4 py-3 mt-2 outline-none focus:border-[#F97316]'
+                    'class' => 'sr-only'
                 ],
-                'label' => 'pièce justificative requise (nif/stat/kbis) *',
+                'label' => 'pièce justificative requise (nif/stat/kbis) en PDF *',
                 'label_attr' => [
                     'class' => 'uppercase mt-6'
                 ],
@@ -91,10 +92,9 @@ class SellerType extends AbstractType
             ])
             ->add('logoFile', VichImageType::class, [
                 'attr' => [
-                    'class' => 'bg-[#111111] border border-[#333]
-						        rounded-xl px-4 py-3 mt-2 outline-none focus:border-[#F97316]'
+                    'class' => 'sr-only'
                 ],
-                'label' => 'Photo / logo de l\'entreprose *',
+                'label' => 'Photo / logo de l\'entreprise *',
                 'label_attr' => [
                     'class' => 'uppercase mt-6'
                 ],
