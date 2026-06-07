@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\AdminNotification;
 use App\Entity\Seller;
+use App\Entity\UserNotification;
 use App\Entity\Vehicle;
 use App\Form\SellerType;
 use App\Form\VehicleType;
 use App\Repository\SellerRepository;
+use App\Repository\UserNotificationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +26,8 @@ final class SellerController extends AbstractController
      * @return Response
      */
     #[Route('/vendeur', 'seller.index', methods: ['GET'])]
-    public function index(SellerRepository $repository): Response
+    public function index(SellerRepository $repository,
+    UserNotificationRepository $userNotificationRepository): Response
     {
         $seller = $repository->findOneBy(['user' => $this->getUser()]);
 
@@ -32,8 +35,15 @@ final class SellerController extends AbstractController
             return $this->redirectToRoute('home.index');
         }
 
+        // Récuperer le nombre de notification non lue de l'utilisateur actuel.
+        $userNotificationsNonLue = $userNotificationRepository->count([
+            'user' => $this->getUser(),
+            'isRead' => false
+        ]);
+
         return $this->render('pages/seller/index.html.twig', [
-            'seller' => $seller
+            'seller' => $seller,
+            'userNotificationsNonLue' => $userNotificationsNonLue
         ]);
     }
 
@@ -109,10 +119,13 @@ final class SellerController extends AbstractController
         Request $request,
         EntityManagerInterface $manager
     ): Response {
+
+        // Un utilisateur non connecté ne peut pas créer une annonce
         if (!$this->getUser()) {
             return $this->redirectToRoute('home.index');
         }
 
+        // Empêcher un vendeur non validé de créer une annonce
         if ($this->getUser()->getRoles()[0] != 'ROLE_SELLER') {
             return $this->redirectToRoute('seller.index');
         }
@@ -134,5 +147,71 @@ final class SellerController extends AbstractController
         return $this->render('pages/seller/annonce_new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/vendeur/notification', 'seller.notification.index', methods: ['GET'])]
+    public function notificationIndex(UserNotificationRepository $repository,
+    SellerRepository $sellerRepository): Response
+    {
+        // Un utilisateur non connecté ne peut voir ses notifications
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('home.index');
+        }
+        
+        // Un utilisateur qui n'a pas envoyé une demande vendeur
+        // ne peut voir le notification pour vendeur
+        $seller = $sellerRepository->findOneBy(['user' => $this->getUser()]);
+        if($seller == null) {
+            return $this->redirectToRoute('home.index');
+        }
+
+        // Récuperer le nombre de notification non lue de l'utilisateur actuel.
+        $userNotifications = $repository->findBy(['user' => $this->getUser()]);
+        $userNotificationsNonLue = $repository->count([
+            'user' => $this->getUser(),
+            'isRead' => false
+        ]);
+
+        return $this->render('pages/seller/notification_index.html.twig', [
+            'userNotifications' => $userNotifications,
+            'userNotificationsNonLue' => $userNotificationsNonLue
+        ]);
+    }
+
+    /**
+     * Permet de marquer une notification comme lue
+    *
+    * @param UserNotification $userNotification
+    * @param EntityManagerInterface $manager
+    * @return Response
+    */
+    #[Route('/vendeur/confirmation-notification/{id}', 'seller.notification.confirm', methods: ['GET'])]
+    public function notificationConfirm(UserNotification $userNotification,
+    EntityManagerInterface $manager): Response
+    {
+        // Mettre la notification comme lue
+        $userNotification->setIsRead(true);
+        $manager->persist($userNotification);
+        $manager->flush();
+
+        return $this->redirectToRoute('seller.notification.index');
+    }
+
+    /**
+     * Permet de supprimer une notification
+    *
+    * @param UserNotification $userNotification
+    * @param EntityManagerInterface $manager
+    * @return Response
+    */
+    #[Route('/vendeur/suppression-notification/{id}', 'seller.notification.delete', methods: ['GET'])]
+    public function notificationDelete(UserNotification $userNotification,
+    EntityManagerInterface $manager): Response
+    {
+        // Supprimer la notification
+        $manager->remove($userNotification);
+        $manager->flush();
+
+        return $this->redirectToRoute('seller.notification.index');
     }
 }

@@ -38,14 +38,12 @@
 					class="space-y-2">
 
 					<!-- Dashboard -->
-					<a href="{{ app.current_route == 'seller.index' ? path('seller.index') : path('admin.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#222] transition {{ app.current_route == 'admin.index' or app.current_route == 'seller.index' ? 'bg-[#1a1a1a] text-[#F97316] font-semibold' : '' }}">
+					<a href="{{ app.current_route == 'seller.index' or app.current_route == 'seller.notification.index' ? path('seller.index') : path('admin.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#222] transition {{ app.current_route == 'admin.index' or app.current_route == 'seller.index' ? 'bg-[#1a1a1a] text-[#F97316] font-semibold' : '' }}">
 
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" 
-							stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 
-							1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1
+																																																								1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
 						</svg>
-
 						Dashboard
 					</a>
 
@@ -70,13 +68,25 @@
 					</a>
 
 					{# Notification #}
-					<a href="{{ path('admin.notification.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#222] transition {{ app.current_route == 'admin.notification.index' ? 'bg-[#1a1a1a] text-[#F97316] font-semibold' : '' }}">
+					<a href="{{ app.current_route == 'seller.index' or app.current_route == 'seller.notification.index' ? path('seller.notification.index') : path('admin.notification.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#222] transition {{ app.current_route == 'admin.notification.index' or app.current_route == 'seller.notification.index' ? 'bg-[#1a1a1a] text-[#F97316] font-semibold' : '' }}">
 
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.07 6.36a1 1 0 00.95.69h6.709c.969 0 1.371 1.24.588 1.81l-5.428 3.945a1 1 0 00-.364 1.118l2.07 6.36c.3.921-.755 1.688-1.54 1.118l-5.428-3.945a1 1 0 00-1.175 0l-5.428 3.945c-.785.57-1.84-.197-1.54-1.118l2.07-6.36a1 1 0 00-.364-1.118L2.724 11.787c-.783-.57-.38-1.81.588-1.81h6.709a1 1 0 00.95-.69l2.07-6.36z"/>
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<rect x="2" y="4" width="20" height="16" rx="2"/>
+							<path d="M22 7L13.03 12.7a2 2 0 0 1-2.06 0L2 7"/>
 						</svg>
-
 						Notifications
+						{% if app.current_route == 'admin.notification.index' or app.current_route == 'admin.index' %}
+							{% if nbrNotificationNonLue > 0 %}
+								<span class="bg-[#F97316] text-white text-[9px] font-black rounded-full w-3.5 h-3.5 flex items-center justify-center -mt-3 -ml-1">{{ nbrNotificationNonLue }}</span>
+							{% endif %}
+						{% endif %}
+
+						{% if app.current_route == 'seller.notification.index' or app.current_route == 'seller.index' %}
+							{% if userNotificationsNonLue > 0 %}
+								<span class="bg-[#F97316] text-white text-[9px] font-black rounded-full w-3.5 h-3.5 flex items-center justify-center -mt-3 -ml-1">{{ userNotificationsNonLue }}</span>
+							{% endif %}
+						{% endif %}
+
 					</a>
 
 				</nav>

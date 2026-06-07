@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Seller;
+use App\Entity\UserNotification;
 use App\Repository\AdminNotificationRepository;
 use App\Repository\SellerRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,11 +20,15 @@ final class AdminController extends AbstractController
     * @return Response
     */
     #[Route('/admin', name: 'admin.index', methods: ['GET'])]
-    public function index(SellerRepository $repository): Response
+    public function index(SellerRepository $repository,
+    AdminNotificationRepository $adminNotificationRepository): Response
     {
+        $nbrNotificationNonLue = $adminNotificationRepository->count(['isRead' => false]);
+
         $demandes = $repository->findBy(['status' => 'pending']);
         return $this->render('pages/admin/index.html.twig', [
-            'demandes' => $demandes
+            'demandes' => $demandes,
+            'nbrNotificationNonLue' => $nbrNotificationNonLue
         ]);
     }
 
@@ -37,8 +42,11 @@ final class AdminController extends AbstractController
     public function notificationIndex(AdminNotificationRepository $repository): Response
     {
         $notifications = $repository->findAll();
+        $nbrNotificationNonLue = $repository->count(['isRead' => false]);
+
         return $this->render('pages/admin/notification_index.html.twig', [
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'nbrNotificationNonLue' => $nbrNotificationNonLue
         ]);
     }
 
@@ -49,8 +57,17 @@ final class AdminController extends AbstractController
     * @return Response
     */
     #[Route('/admin/detail-notification/{id}', 'admin.notification.show', methods: ['GET'])]
-    public function notificationShow(Seller $seller): Response
+    public function notificationShow(Seller $seller,
+    AdminNotificationRepository $repository,
+    EntityManagerInterface $manager): Response
     {
+        // Pour rendre une notification non lue par "lue"
+        $notification = $repository->findOneBy(['seller' => $seller]);
+
+        $notification->setIsRead(true);
+        $manager->persist($notification);
+        $manager->flush();
+
         return $this->render('pages/admin/notification_show.html.twig', [
             'seller' => $seller
         ]);
@@ -102,7 +119,8 @@ final class AdminController extends AbstractController
     */
     #[Route('/admin/confirmation-notification/{id}', 'admin.notification.confirm', methods: ['GET'])]
     public function notificationConfirm(Seller $seller,
-    EntityManagerInterface $manager): Response
+    EntityManagerInterface $manager,
+    AdminNotificationRepository $repository): Response
     {
         // Pour empêcher que les demande déjà réfusé
         // se remettre à demande vérifié
@@ -110,8 +128,21 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('admin.notification.index');
         }
 
-        $seller->setStatus('verified');
+        // Création du contenu de notification pour l'utilisateur vendeur
+        $userNotification = new UserNotification();
+        $userNotification->setContent("L'administrateur a accèpté votre demande, vous pouvez désormais publier des annonces.")
+        ->setIsRead(false)
+        ->setUser($seller->getUser());
+        $manager->persist($userNotification);
+        $manager->flush();
 
+        // Pour rendre une notification non lue par "lue"
+        $notification = $repository->findOneBy(['seller' => $seller]);
+        $notification->setIsRead(true);
+        $manager->persist($notification);
+        $manager->flush();
+
+        $seller->setStatus('verified');
         $user = $seller->getUser();
         $user->setRoles(['ROLE_SELLER']);
         $manager->persist($seller);
@@ -121,6 +152,34 @@ final class AdminController extends AbstractController
             'success',
             'Demande accèptée avec succès !'
         );
+
+        return $this->redirectToRoute('admin.notification.index');
+    }
+
+    /**
+     * This controller allow to delete a notification
+    *
+    * @param integer $id
+    * @param EntityManagerInterface $manager
+    * @param AdminNotificationRepository $repository
+    * @return Response
+    */
+    #[Route('admin/suppression-notification/{id}', 'admin.notification.delete', methods: ['GET'])]
+    public function notificationDelete(int $id,
+    EntityManagerInterface $manager,
+    AdminNotificationRepository $repository): Response
+    {
+        // Pour eviter les erreur, il faut empêcher l'utilisateur
+        // de supprimer une notification qui n'existe pas.
+        // Ici on n'a pas utilisé le param converter parceque
+        // c'est un cas spécial.
+        $adminNotification = $repository->findOneBy(['id' => $id]);
+        if($adminNotification == null || $adminNotification->getSeller()->getStatus() == 'pending') {
+            return $this->redirectToRoute('admin.notification.index');
+        }
+
+        $manager->remove($adminNotification);
+        $manager->flush();
 
         return $this->redirectToRoute('admin.notification.index');
     }

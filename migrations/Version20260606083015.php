@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260604185551 extends AbstractMigration
+final class Version20260606083015 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,6 +20,7 @@ final class Version20260604185551 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE admin_notification (id INT AUTO_INCREMENT NOT NULL, content VARCHAR(255) NOT NULL, is_read TINYINT NOT NULL, created_at DATETIME NOT NULL, seller_id INT NOT NULL, INDEX IDX_C615D4278DE820D9 (seller_id), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('ALTER TABLE admin_notification ADD CONSTRAINT FK_C615D4278DE820D9 FOREIGN KEY (seller_id) REFERENCES seller (id)');
         $this->addSql('ALTER TABLE seller ADD user_id INT NOT NULL');
         $this->addSql('ALTER TABLE seller ADD CONSTRAINT FK_FB1AD3FCA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
@@ -30,6 +31,7 @@ final class Version20260604185551 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE admin_notification DROP FOREIGN KEY FK_C615D4278DE820D9');
+        $this->addSql('DROP TABLE admin_notification');
         $this->addSql('ALTER TABLE seller DROP FOREIGN KEY FK_FB1AD3FCA76ED395');
         $this->addSql('DROP INDEX UNIQ_FB1AD3FCA76ED395 ON seller');
         $this->addSql('ALTER TABLE seller DROP user_id');

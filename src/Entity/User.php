@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -57,10 +59,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Seller $seller = null;
 
+    /**
+     * @var Collection<int, UserNotification>
+     */
+    #[ORM\OneToMany(targetEntity: UserNotification::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $userNotifications;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->userNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,6 +241,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserNotification>
+     */
+    public function getUserNotifications(): Collection
+    {
+        return $this->userNotifications;
+    }
+
+    public function addUserNotification(UserNotification $userNotification): static
+    {
+        if (!$this->userNotifications->contains($userNotification)) {
+            $this->userNotifications->add($userNotification);
+            $userNotification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserNotification(UserNotification $userNotification): static
+    {
+        if ($this->userNotifications->removeElement($userNotification)) {
+            // set the owning side to null (unless already changed)
+            if ($userNotification->getUser() === $this) {
+                $userNotification->setUser(null);
+            }
+        }
 
         return $this;
     }
