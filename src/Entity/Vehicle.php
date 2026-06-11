@@ -7,12 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
 #[UniqueEntity('brand')]
-#[Vich\Uploadable]
 class Vehicle
 {
     #[ORM\Id]
@@ -78,15 +75,6 @@ class Vehicle
     #[Assert\NotBlank()]
     #[Assert\Length(min: 3, max: 100)]
     private ?string $city = null;
-
-    // NOTE: This is not a mapped field of entity metadata, just a simple property.
-    #[Vich\UploadableField(mapping: 'car_images', fileNameProperty: 'imageName')]
-    private ?File $imageFile = null;
-
-    // NOTE: This field and the next one need to be nullable, otherwise the deletion won't work
-    //       if you want non-nullable fields, set the "erase_fields" option to false in the mapping config
-    #[ORM\Column(nullable: true)]
-    private ?string $imageName = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -248,39 +236,6 @@ class Vehicle
         $this->city = $city;
 
         return $this;
-    }
-
-    /**
-     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
-     */
-    public function setImageFile(?File $imageFile = null): void
-    {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    public function setImageName(?string $imageName): void
-    {
-        $this->imageName = $imageName;
-    }
-
-    public function getImageName(): ?string
-    {
-        return $this->imageName;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

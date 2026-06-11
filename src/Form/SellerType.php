@@ -29,8 +29,13 @@ class SellerType extends AbstractType
                     'class' => 'uppercase'
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(min: 3, max: 50)
+                    new Assert\NotBlank(message: "Le nom d'entreprise est obligatoire."),
+                    new Assert\Length(
+                        min: 3,
+                        max: 50,
+                        minMessage: "Le nom d'entreprise doit contenir au moins {{ limit }} catactères.",
+                        maxMessage: "Le nom d'entreprise ne doit pas dépasser 50 caractères."
+                    )
                 ]
             ])
             ->add('phoneNumber', TextType::class, [
@@ -44,8 +49,11 @@ class SellerType extends AbstractType
                     'class' => 'uppercase'
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Regex('/^(032|033|034|038)\d{7}$/')
+                    new Assert\NotBlank(message: "Le numéro téléphone est obligatoire."),
+                    new Assert\Regex(
+                        '/^(032|033|034|038)\d{7}$/',
+                        message: "Le numéro téléphone est invalide."
+                    )
                 ]
 
             ])
@@ -61,8 +69,8 @@ class SellerType extends AbstractType
                     'class' => 'uppercase mt-6'
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Email()
+                    new Assert\NotBlank(message: "L'email est obligatoire."),
+                    new Assert\Email(message: "Adresse email invalide.")
                 ]
             ])
             ->add('adresse', TextType::class, [
@@ -76,8 +84,13 @@ class SellerType extends AbstractType
                     'class' => 'uppercase mt-6'
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(min: 5, max: 255)
+                    new Assert\NotBlank(message: "L'adresse physique est obligatoire."),
+                    new Assert\Length(
+                        min: 5,
+                        max: 255,
+                        minMessage: "L'adresse doit contenir au moins 5 caractères.",
+                        maxMessage: "L'adresse physique ne dois pas dépasser 255 caractères."
+                    )
                 ]
             ])
             ->add('documentFile', VichFileType::class, [
@@ -88,7 +101,15 @@ class SellerType extends AbstractType
                 'label_attr' => [
                     'class' => 'uppercase mt-6'
                 ],
-                'constraints' => new Assert\File()
+                'required' => false,
+                'allow_delete' => false,
+                'constraints' => [
+                    new Assert\NotBlank(message: "Le document justificatif est obligatoire."),
+                    new Assert\File(
+                        mimeTypes: ['application/pdf'],
+                        mimeTypesMessage: 'Veuillez importer un fichier PDF.'
+                    )
+                ]
             ])
             ->add('logoFile', VichImageType::class, [
                 'attr' => [
@@ -98,7 +119,14 @@ class SellerType extends AbstractType
                 'label_attr' => [
                     'class' => 'uppercase mt-6'
                 ],
-                'constraints' => new Assert\Image()
+                'constraints' => [
+                    new Assert\NotBlank(message: "Le logo de l'entreprise est obligatoire."),
+                    new Assert\Image(
+                        maxSize: "2M",
+                        maxSizeMessage: "L'image ne doit pas dépasser 5M.",
+                        mimeTypesMessage: "Veuillez importer une image PNG, JPG, JPEG ou WEBP."
+                    )
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
@@ -29,23 +28,15 @@ class Seller
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 3, max: 50)]
     private ?string $companyName = null;
 
     #[ORM\Column(length: 20)]
-    #[Assert\NotBlank()]
-    #[Assert\Regex('/^(032|033|034|038)\d{7}$/')]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 180)]
-    #[Assert\NotBlank()]
-    #[Assert\Email()]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 5, max: 255)]
     private ?string $adresse = null;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
