@@ -30,50 +30,38 @@
 					<p class="text-gray-500 mt-2 text-sm">Création de compte</p>
 				</div>
 
-				{# <form class="space-y-5">
-																                    <div>
-																						<label class="text-sm text-gray-400 block mb-2">Nom complet</label>
-																						<input type="text" class="w-full bg-[#111111] border border-[#333] focus:border-[#F97316] rounded-lg px-4 py-3 outline-none" placeholder="Rakoto Jean"/>
-																					</div>
-																
-																					<div>
-																						<label class="text-sm text-gray-400 block mb-2">Adresse email</label>
-																						<input type="email" class="w-full bg-[#111111] border border-[#333] focus:border-[#F97316] rounded-lg px-4 py-3 outline-none" placeholder="rakoto@example.com"/>
-																					</div>
-																
-																					<div>
-																						<label class="text-sm text-gray-400 block mb-2">Mot de passe</label>
-																						<input class="w-full bg-[#111111] border border-[#333] focus:border-[#F97316] rounded-lg px-4 py-3 outline-none" placeholder="********"/>
-																					</div>
-																
-																					<button type="submit" class="w-full bg-[#F97316] hover:bg-[#ea6500] transition-colors py-3 rounded-lg font-bold">
-																						Créer mon compte
-																					</button>
-																				</form> #}
-				{{ form_start(form) }}
+				{{ form_start(form, {'attr' : {'novalidate' : 'novalidate', 'data-turbo' : 'false'}}) }}
 				<div class="space-y-5">
 					<div>
 						{{ form_label(form.fullName) }}
 						{{ form_widget(form.fullName) }}
-						{{ form_errors(form.fullName) }}
+						{% for error in form.fullName.vars.errors %}
+							<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+						{% endfor %}
 					</div>
 
 					<div>
 						{{ form_label(form.email) }}
 						{{ form_widget(form.email) }}
-						{{ form_errors(form.email) }}
+						{% for error in form.email.vars.errors %}
+							<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+						{% endfor %}
 					</div>
 
 					<div>
 						{{ form_label(form.plaintextPassword.first) }}
 						{{ form_widget(form.plaintextPassword.first) }}
-						{{ form_errors(form.plaintextPassword.first) }}
+						{% for error in form.plaintextPassword.first.vars.errors %}
+							<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+						{% endfor %}
 					</div>
 
 					<div>
 						{{ form_label(form.plaintextPassword.second) }}
 						{{ form_widget(form.plaintextPassword.second) }}
-						{{ form_errors(form.plaintextPassword.second) }}
+						{% for error in form.plaintextPassword.second.vars.errors %}
+							<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+						{% endfor %}
 					</div>
 					{{ form_row(form.submit) }}
 				</div>

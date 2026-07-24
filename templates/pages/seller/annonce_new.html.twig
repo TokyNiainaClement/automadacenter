@@ -6,83 +6,107 @@
 
 {% block body %}
 	<div class="max-w-5xl mx-auto bg-[#222222] border border-[#333] rounded-2xl p-8 my-5">
-		<h1 class="text-xl font-black mb-8">Ajouter une annonce</h1>
+		<h1 class="text-xl font-black">Ajouter une annonce</h1>
+		<p class="text-gray-500 mt-4 mb-4">Décrivez votre véhicule en détail pour attirer les meilleurs acheteurs. Une annonce complète et précise sera publiée avec le badge
+			<span class="text-[#F97316]">Annonce Vérifiée</span>
+			après validation par notre équipe</p>
 
-		{{ form_start(form) }}
+		{{ form_start(form, { 'attr' : { 'novalidate' : 'novalidate', 'data-turbo' : 'false' } }) }}
+
 		<div class="grid md:grid-cols-2 gap-5">
 			<div class="grid md:columns-1">
 				{{ form_label(form.title) }}
 				{{ form_widget(form.title) }}
+				{% for error in form.title.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 			<div class="grid md:columns-1">
 				{{ form_label(form.price) }}
 				{{ form_widget(form.price) }}
+				{% for error in form.price.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.brand) }}
 				{{ form_widget(form.brand) }}
+				{% for error in form.brand.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.model) }}
 				{{ form_widget(form.model) }}
+				{% for error in form.model.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.year) }}
 				{{ form_widget(form.year) }}
+				{% for error in form.year.vars.errors %}
+					<p class="text-red-500 text-sm">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.mileage) }}
 				{{ form_widget(form.mileage) }}
+				{% for error in form.mileage.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.fuelType) }}
 				{{ form_widget(form.fuelType) }}
+				{% for error in form.fuelType.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.transmission) }}
 				{{ form_widget(form.transmission) }}
+				{% for error in form.transmission.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 			<div class="grid md:columns-1">
 				{{ form_label(form.color) }}
 				{{ form_widget(form.color) }}
+				{% for error in form.color.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 
 		</div>
 		<div class="grid md:columns-2">
 			{{ form_label(form.description) }}
 			{{ form_widget(form.description) }}
+			{% for error in form.description.vars.errors %}
+				<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+			{% endfor %}
 		</div>
 		<div class="grid md:grid-cols-2 gap-5">
 			<div class="grid md:columns-1">
 				{{ form_label(form.vehicleCondition) }}
 				{{ form_widget(form.vehicleCondition) }}
+				{% for error in form.vehicleCondition.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 			<div class="grid md:columns-1">
 				{{ form_label(form.city) }}
 				{{ form_widget(form.city) }}
-			</div>
-		</div>
-
-		<div class="grid md:grid-cols-2 gap-5">
-			<div class="grid md:columns-1">
-				{{ form_label(form.imageFile) }}
-				<label class="flex items-center gap-4 w-full border-2 mt-2 border-dashed border-[#333] rounded-xl px-4 py-4 cursor-pointer hover:border-[#F97316] hover:bg-[#f974161d] transition group">
-					<span class="shrink-0 w-10 h-10 rounded-full bg-[#3b3a30]/8 flex items-center justify-center text-[#3b3a30] group-hover:bg-[#ffcc5c]/20 transition">
-						📷
-					</span>
-					<span class="flex flex-col gap-0.5">
-						<span class="text-sm font-medium text-gray-400">Choisir une image</span>
-						<span class="text-xs text-gray-400">PNG, JPG, WEBP — max 2 Mo</span>
-					</span>
-					{{ form_widget(form.imageFile) }}
-				</label>
+				{% for error in form.city.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
 			</div>
 		</div>
 

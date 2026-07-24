@@ -26,6 +26,10 @@ class VehicleImage
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'vehicleImages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicle $vehicle = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -87,6 +91,18 @@ class VehicleImage
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?Vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(?Vehicle $vehicle): static
+    {
+        $this->vehicle = $vehicle;
 
         return $this;
     }

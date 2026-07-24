@@ -130,7 +130,8 @@ final class AdminController extends AbstractController
 
         // Création du contenu de notification pour l'utilisateur vendeur
         $userNotification = new UserNotification();
-        $userNotification->setContent("L'administrateur a accèpté votre demande, vous pouvez désormais publier des annonces.")
+        $userNotification->setTitle("Demande d'inscription")
+        ->setContent("L'administrateur a accèpté votre demande, vous pouvez désormais publier des annonces.")
         ->setIsRead(false)
         ->setUser($seller->getUser());
         $manager->persist($userNotification);

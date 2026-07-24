@@ -13,9 +13,8 @@ class AdminNotification
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'adminNotifications')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Seller $seller = null;
+    #[ORM\Column(length: 100)]
+    private ?string $title = null;
 
     #[ORM\Column(length: 255)]
     private ?string $content = null;
@@ -26,6 +25,9 @@ class AdminNotification
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'adminNotifications')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Seller $seller = null;
 
     public function __construct()
     {
@@ -37,14 +39,14 @@ class AdminNotification
         return $this->id;
     }
 
-    public function getSeller(): ?Seller
+    public function getTitle(): ?string
     {
-        return $this->seller;
+        return $this->title;
     }
 
-    public function setSeller(?Seller $seller): static
+    public function setTitle(string $title): static
     {
-        $this->seller = $seller;
+        $this->title = $title;
 
         return $this;
     }
@@ -84,5 +86,18 @@ class AdminNotification
 
         return $this;
     }
+    
+    public function getSeller(): ?Seller
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?Seller $seller): static
+    {
+        $this->seller = $seller;
+
+        return $this;
+    }
+
 
 }

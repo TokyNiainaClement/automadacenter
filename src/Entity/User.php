@@ -12,7 +12,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity('email')]
+#[UniqueEntity(
+    fields: ['email'],
+    message: "Adresse email déjà utilisé."
+)]
 #[ORM\EntityListeners(['App\EntityListener\UserListener'])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -23,13 +26,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 3, max: 50)]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 180)]
-    #[Assert\Email()]
-    #[Assert\Length(min: 2, max: 180)]
     private ?string $email = null;
 
     /**

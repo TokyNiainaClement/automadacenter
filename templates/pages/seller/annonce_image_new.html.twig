@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	AutoMadaCenter - Ajouter des photos
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-5xl mx-auto bg-[#222222] border border-[#333] rounded-2xl p-8 my-5">
+		<h1 class="text-xl font-black">Ajouter des photos</h1>
+		<p class="text-gray-500 mt-4 mb-3">Sélectionnez l'annonce concernée puis ajoutez les photos de votre véhicule. Des photos de qualité augmentent considérablement vos chances de
+			<span class="text-[#F97316]">vendre rapidement</span>
+		</p>
+
+		{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+
+		<div class="grid md:grid-cols-1 gap-5">
+			<div class="grid md:columns-1">
+				{{ form_label(form.vehicle) }}
+				{{ form_widget(form.vehicle) }}
+				{% for error in form.vehicle.vars.errors %}
+					<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div class="grid md:grid-cols-1 gap-5">
+			{{ form_label(form.vehicleImageFile) }}
+			<label class="flex items-center gap-4 w-full border-2 mt-2 border-dashed border-[#333] rounded-xl px-4 py-4 cursor-pointer hover:border-[#F97316] hover:bg-[#f974161d] transition group">
+				<span class="shrink-0 w-10 h-10 rounded-full bg-[#3b3a30]/8 flex items-center justify-center text-[#3b3a30] group-hover:bg-[#ffcc5c]/20 transition">
+					📷️
+				</span>
+				<span class="flex flex-col gap-0.5">
+					<span class="text-sm font-medium text-gray-400">Choisir des photos</span>
+					<span class="text-xs text-gray-400">PNG, JPG, WEBP — max 2 Mo</span>
+				</span>
+				{{ form_widget(form.vehicleImageFile) }}
+			</label>
+			{% for error in form.vehicleImageFile.vars.errors %}
+				<p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+			{% endfor %}
+		</div>
+
+		<div>
+			{{ form_row(form.submit) }}
+		</div>
+
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

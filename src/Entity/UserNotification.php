@@ -13,6 +13,9 @@ class UserNotification
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $title = null;
+
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
@@ -26,6 +29,7 @@ class UserNotification
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -34,6 +38,18 @@ class UserNotification
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getContent(): ?string
@@ -83,4 +99,5 @@ class UserNotification
 
         return $this;
     }
+
 }

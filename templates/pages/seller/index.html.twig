@@ -42,7 +42,7 @@
 								</p>
 
 							{% else %}
-							<div class="w-2 h-2 rounded-full bg-red-500"></div>
+								<div class="w-2 h-2 rounded-full bg-red-500"></div>
 
 								<p class="text-gray-400 text-sm">
 									Compte professionnel • Réfusé
@@ -55,10 +55,21 @@
 				</div>
 
 				{% if seller.status == 'verified' %}
-					<!-- Bouton -->
-					<a class="bg-[#F97316] hover:bg-[#ea6500] transition px-5 py-3 rounded-lg font-semibold text-sm" href="{{ path('annonce.new') }}">
-						Ajouter une annonce
-					</a>
+					<div class="flex items-center gap-3">
+						<a class="bg-[#F97316] hover:bg-[#ea6500] transition px-5 py-3 rounded-lg font-semibold text-sm flex items-center gap-2" href="{{ path('annonce.new') }}">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+							</svg>
+							Ajouter une annonce
+						</a>
+						<a class="bg-[#2a2a2a] hover:bg-[#333] transition px-5 py-3 rounded-lg font-semibold text-sm flex items-center gap-2" href="{{ path('annonce.image.new') }}">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16l4-4a2 2 0 012.5 0L13 15m4-6h.01M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+								<circle cx="14" cy="8" r="1.5" fill="currentColor" stroke="none"/>
+							</svg>
+							Ajouter des photos
+						</a>
+					</div>
 				{% endif %}
 			</div>
 
@@ -83,6 +94,15 @@
 					<p class="text-[#F97316] mt-2 text-xs">En ligne actuellement</p>
 				</div>
 
+			</div>
+
+			<!-- FILTRE ANNONCES -->
+			<div
+				class="mb-6 flex gap-4">
+				{# text-gray-400 #}
+				<a href="#" class="bg-transparent text-gray-400 border-[#2a2a2a] hover:border-gray-400 hover:text-white px-6 py-3 rounded-xl border transition duration-200 font-medium">
+					Voir vos annonces en attente
+				</a>
 			</div>
 
 			<!-- ANNONCES -->

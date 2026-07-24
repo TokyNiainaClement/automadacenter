@@ -6,7 +6,9 @@ use App\Entity\AdminNotification;
 use App\Entity\Seller;
 use App\Entity\UserNotification;
 use App\Entity\Vehicle;
+use App\Entity\VehicleImage;
 use App\Form\SellerType;
+use App\Form\VehicleImageType;
 use App\Form\VehicleType;
 use App\Repository\SellerRepository;
 use App\Repository\UserNotificationRepository;
@@ -26,9 +28,10 @@ final class SellerController extends AbstractController
      * @return Response
      */
     #[Route('/vendeur', 'seller.index', methods: ['GET'])]
-    public function index(SellerRepository $repository,
-    UserNotificationRepository $userNotificationRepository): Response
-    {
+    public function index(
+        SellerRepository $repository,
+        UserNotificationRepository $userNotificationRepository
+    ): Response {
         $seller = $repository->findOneBy(['user' => $this->getUser()]);
 
         if ($seller == null) {
@@ -89,10 +92,11 @@ final class SellerController extends AbstractController
             $adminNotification = new AdminNotification();
 
             // Création du contenu de la notification
-            $adminNotification->setContent($newSeller->getCompanyName() .' '. 
-            'a soumis une nouvelle demande de vérification vendeur professionnel.')
-            ->setIsRead(false)
-            ->setSeller($newSeller);
+            $adminNotification->setContent($newSeller->getCompanyName() . ' ' .
+                'a soumis une nouvelle demande de vérification vendeur professionnel.')
+                ->setTitle('Demande d\'inscription vendeur')
+                ->setIsRead(false)
+                ->setSeller($newSeller);
 
             // Sauvegarde de la notification
             $manager->persist($adminNotification);
@@ -117,7 +121,8 @@ final class SellerController extends AbstractController
     #[Route('/vendeur/annonce/creation', 'annonce.new', methods: ['GET', 'POST'])]
     public function annonceNew(
         Request $request,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        SellerRepository $sellerRepository
     ): Response {
 
         // Un utilisateur non connecté ne peut pas créer une annonce
@@ -130,6 +135,9 @@ final class SellerController extends AbstractController
             return $this->redirectToRoute('seller.index');
         }
 
+        // Réccuperer le profile vendeur de l'utilisateur en cours
+        $seller = $sellerRepository->findOneBy(['user' => $this->getUser()]);
+
         $vehicle = new Vehicle();
         $form = $this->createForm(VehicleType::class, $vehicle);
 
@@ -138,6 +146,11 @@ final class SellerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $vehicle = $form->getData();
 
+            // Puis associer le vendeur à la nouvelle annonce crée
+            $vehicle->setSeller($seller);
+            $vehicle->setStatus("pending");
+
+            // Sauvegarde de l'annonce
             $manager->persist($vehicle);
             $manager->flush();
 
@@ -149,19 +162,69 @@ final class SellerController extends AbstractController
         ]);
     }
 
-    #[Route('/vendeur/notification', 'seller.notification.index', methods: ['GET'])]
-    public function notificationIndex(UserNotificationRepository $repository,
-    SellerRepository $sellerRepository): Response
-    {
-        // Un utilisateur non connecté ne peut voir ses notifications
-        if(!$this->getUser()) {
+    /**
+     * This controller allow to add images for a vehicle
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('/vendeur/image-annonce/creation', 'annonce.image.new', methods: ['GET', 'POST'])]
+    public function imageNew(
+        Request $request,
+        EntityManagerInterface $manager
+    ): Response {
+        // Un utilisateur non connecté ne peut pas ajouter des images à une annonce
+        if (!$this->getUser()) {
             return $this->redirectToRoute('home.index');
         }
-        
+
+        // Empêcher un vendeur non validé d'ajouter des images à une annonce
+        if ($this->getUser()->getRoles()[0] != 'ROLE_SELLER') {
+            return $this->redirectToRoute('seller.index');
+        }
+
+        $vehicleImage = new VehicleImage();
+        $form = $this->createForm(VehicleImageType::class, $vehicleImage);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vehicle = $vehicleImage->getVehicle();
+
+            $imageFiles = $form->get('vehicleImageFile')->getData();
+
+            foreach ($imageFiles as $imageFile) {
+                $image = new VehicleImage();
+
+                $image->setVehicle($vehicle);
+                $image->setVehicleImageFile($imageFile);
+                $manager->persist($image);
+            }
+
+            $manager->flush();
+
+            return $this->redirectToRoute('seller.index');
+        }
+
+        return $this->render('pages/seller/annonce_image_new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/vendeur/notification', 'seller.notification.index', methods: ['GET'])]
+    public function notificationIndex(
+        UserNotificationRepository $repository,
+        SellerRepository $sellerRepository
+    ): Response {
+        // Un utilisateur non connecté ne peut voir ses notifications
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('home.index');
+        }
+
         // Un utilisateur qui n'a pas envoyé une demande vendeur
         // ne peut voir le notification pour vendeur
         $seller = $sellerRepository->findOneBy(['user' => $this->getUser()]);
-        if($seller == null) {
+        if ($seller == null) {
             return $this->redirectToRoute('home.index');
         }
 
@@ -180,15 +243,16 @@ final class SellerController extends AbstractController
 
     /**
      * Permet de marquer une notification comme lue
-    *
-    * @param UserNotification $userNotification
-    * @param EntityManagerInterface $manager
-    * @return Response
-    */
+     *
+     * @param UserNotification $userNotification
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/vendeur/confirmation-notification/{id}', 'seller.notification.confirm', methods: ['GET'])]
-    public function notificationConfirm(UserNotification $userNotification,
-    EntityManagerInterface $manager): Response
-    {
+    public function notificationConfirm(
+        UserNotification $userNotification,
+        EntityManagerInterface $manager
+    ): Response {
         // Mettre la notification comme lue
         $userNotification->setIsRead(true);
         $manager->persist($userNotification);
@@ -199,15 +263,16 @@ final class SellerController extends AbstractController
 
     /**
      * Permet de supprimer une notification
-    *
-    * @param UserNotification $userNotification
-    * @param EntityManagerInterface $manager
-    * @return Response
-    */
+     *
+     * @param UserNotification $userNotification
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/vendeur/suppression-notification/{id}', 'seller.notification.delete', methods: ['GET'])]
-    public function notificationDelete(UserNotification $userNotification,
-    EntityManagerInterface $manager): Response
-    {
+    public function notificationDelete(
+        UserNotification $userNotification,
+        EntityManagerInterface $manager
+    ): Response {
         // Supprimer la notification
         $manager->remove($userNotification);
         $manager->flush();

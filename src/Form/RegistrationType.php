@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 class RegistrationType extends AbstractType
 {
@@ -29,8 +30,13 @@ class RegistrationType extends AbstractType
                     'class' => 'text-sm text-gray-400 block mb-2'
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(min: 3, max: 50)
+                    new Assert\NotBlank(message: "Veuillez saisir votre nom complet"),
+                    new Assert\Length(
+                        min: 3,
+                        max: 50,
+                        minMessage: "Le nom complet doit contenir au moins 3 caractères.",
+                        maxMessage: "Le nom complet ne doit dépasser 50 caractères."
+                    )
                 ]
             ])
             ->add('email', EmailType::class, [
@@ -44,8 +50,14 @@ class RegistrationType extends AbstractType
                     'class' => 'text-sm text-gray-400 block mb-2'
                 ],
                 'constraints' => [
-                    new Assert\Email(),
-                    new Assert\Length(min: 2, max: 180)
+                    new Assert\NotBlank(message: "Veuillez saisir votre email."),
+                    new Assert\Email(message: "L'email est invalide."),
+                    new Assert\Length(
+                        min: 10,
+                        max: 180,
+                        minMessage: "L'email doit contenir au moins {{ limit }} caractères.",
+                        maxMessage: "L'email ne dois pas dépasser {{ limit }} caractères."
+                    )
                 ]
             ])
             ->add('plaintextPassword', RepeatedType::class, [
@@ -74,7 +86,13 @@ class RegistrationType extends AbstractType
                     ],
                 ],
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
-                'constraints' => new Assert\NotBlank()
+                'constraints' => [
+                    new Assert\NotBlank(message: "Le mot de passe est obligatoire."),
+                    new Length(
+                        min: 8,
+                        minMessage: "Le mot de passe doit contenir au moins {{ limit }} caractères."
+                    )
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

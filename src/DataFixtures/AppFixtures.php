@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
         // User
         for ($i = 0; $i < 10; $i++) { 
             $user = new User();
-            $user-> setFullName($this->faker->firstName() . " " . lcfirst($this->faker->name()))
+            $user->setFullName($this->faker->firstNameMale() . " " . lcfirst($this->faker->lastName('male')))
             ->setEmail($this->faker->email())
             ->setRoles(['ROLE_USER'])
             ->setPlaintextPassword('password');

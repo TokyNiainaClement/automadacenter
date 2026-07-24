@@ -3,13 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\VehicleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
-#[UniqueEntity('brand')]
 class Vehicle
 {
     #[ORM\Id]
@@ -18,62 +17,39 @@ class Vehicle
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 10, max: 255)]
     private ?string $title = null;
 
     #[ORM\Column]
-    #[Assert\NotNull()]
-    #[Assert\Positive()]
-    private ?float $price = null; // A corriger
+    private ?float $price = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 5, max: 100)]
     private ?string $brand = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 3, max: 100)]
     private ?string $model = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\NotNull()]
-    #[Assert\LessThan(2027)]
-    private ?int $year = null; // Mila hovaina int
+    #[ORM\Column]
+    private ?int $year = null;
 
     #[ORM\Column]
-    #[Assert\NotNull()]
-    #[Assert\LessThan(200000)]
     private ?int $mileage = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 3, max: 50)]
     private ?string $fuelType = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 5, max: 50)]
     private ?string $transmission = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 3, max: 50)]
     private ?string $color = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank()]
     private ?string $description = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 5, max: 50)]
     private ?string $vehicleCondition = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank()]
-    #[Assert\Length(min: 3, max: 100)]
     private ?string $city = null;
 
     #[ORM\Column]
@@ -82,11 +58,26 @@ class Vehicle
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 10)]
+    private ?string $status = null;
+
+    /**
+     * @var Collection<int, VehicleImage>
+     */
+    #[ORM\OneToMany(targetEntity: VehicleImage::class, mappedBy: 'vehicle', orphanRemoval: true)]
+    private Collection $vehicleImages;
+
+    #[ORM\ManyToOne(inversedBy: 'vehicles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Seller $seller = null;
+
+
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->vehicleImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -142,12 +133,12 @@ class Vehicle
         return $this;
     }
 
-    public function getYear(): ?string
+    public function getYear(): ?int
     {
         return $this->year;
     }
 
-    public function setYear(string $year): static
+    public function setYear(int $year): static
     {
         $this->year = $year;
 
@@ -262,5 +253,57 @@ class Vehicle
         return $this;
     }
 
-    
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VehicleImage>
+     */
+    public function getVehicleImages(): Collection
+    {
+        return $this->vehicleImages;
+    }
+
+    public function addVehicleImage(VehicleImage $vehicleImage): static
+    {
+        if (!$this->vehicleImages->contains($vehicleImage)) {
+            $this->vehicleImages->add($vehicleImage);
+            $vehicleImage->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicleImage(VehicleImage $vehicleImage): static
+    {
+        if ($this->vehicleImages->removeElement($vehicleImage)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicleImage->getVehicle() === $this) {
+                $vehicleImage->setVehicle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSeller(): ?Seller
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?Seller $seller): static
+    {
+        $this->seller = $seller;
+
+        return $this;
+    }
 }

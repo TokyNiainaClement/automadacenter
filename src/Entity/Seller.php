@@ -74,11 +74,18 @@ class Seller
     #[ORM\OneToMany(targetEntity: AdminNotification::class, mappedBy: 'seller', orphanRemoval: true)]
     private Collection $adminNotifications;
 
+    /**
+     * @var Collection<int, Vehicle>
+     */
+    #[ORM\OneToMany(targetEntity: Vehicle::class, mappedBy: 'seller', orphanRemoval: true)]
+    private Collection $vehicles;
+
     public function __construct()
     {
         $this->updatedAt = new \DateTimeImmutable();
         $this->createdAt = new \DateTimeImmutable();
         $this->adminNotifications = new ArrayCollection();
+        $this->vehicles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -276,6 +283,36 @@ class Seller
             // set the owning side to null (unless already changed)
             if ($adminNotification->getSeller() === $this) {
                 $adminNotification->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vehicle>
+     */
+    public function getVehicles(): Collection
+    {
+        return $this->vehicles;
+    }
+
+    public function addVehicle(Vehicle $vehicle): static
+    {
+        if (!$this->vehicles->contains($vehicle)) {
+            $this->vehicles->add($vehicle);
+            $vehicle->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicle(Vehicle $vehicle): static
+    {
+        if ($this->vehicles->removeElement($vehicle)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicle->getSeller() === $this) {
+                $vehicle->setSeller(null);
             }
         }
 
