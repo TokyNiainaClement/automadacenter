@@ -12,12 +12,14 @@ use App\Form\VehicleImageType;
 use App\Form\VehicleType;
 use App\Repository\SellerRepository;
 use App\Repository\UserNotificationRepository;
+use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\Component\Pager\PaginatorInterface;
 
 final class SellerController extends AbstractController
 {
@@ -64,6 +66,12 @@ final class SellerController extends AbstractController
         EntityManagerInterface $manager,
         SellerRepository $repository
     ): Response {
+
+        // Un utilisateur non connecté ne peut pas créer s'inscrire en vendeur
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+
         $seller = $repository->findOneBy(['user' => $this->getUser()]);
 
         if ($seller != null) {
@@ -111,13 +119,49 @@ final class SellerController extends AbstractController
     }
 
     /**
+     * This controller allow us to display the lists of vehicles
+    *
+    * @param SellerRepository $sellerRepository
+    * @param VehicleRepository $vehicleRepository
+    * @return Response
+    */
+    #[Route('/vendeur/annonces', 'annonce.index', methods: ['GET'])]
+    public function annonceIndex(
+        SellerRepository $sellerRepository,
+        VehicleRepository $vehicleRepository, 
+        PaginatorInterface $paginator, Request $request): Response
+    {
+        // Vérifier que l'utilisateur est bien connécté
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+
+        // Un vendeur non validé n'a pas de liste d'annonces
+        if (!in_array('ROLE_SELLER', $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('seller.index');
+        }
+
+        // Récuperer les vehicule à l'aide du profile vendeur.
+        $seller = $sellerRepository->findOneBy(['user' => $this->getUser()]);
+
+        $vehicles = $paginator->paginate(
+            $vehicleRepository->findAnnonces($seller),
+            $request->query->getInt('page', 1), /* Nombre de page */
+            6 /* Limite par page */
+        );
+
+        return $this->render('pages/seller/annonce_index.html.twig', [
+            'vehicles' => $vehicles
+        ]);
+    }
+
+    /**
      * This controller allow the seller to create a new annonce
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return Response
      */
-    // #[IsGranted('ROLE_SELLER')]
     #[Route('/vendeur/annonce/creation', 'annonce.new', methods: ['GET', 'POST'])]
     public function annonceNew(
         Request $request,
@@ -127,11 +171,11 @@ final class SellerController extends AbstractController
 
         // Un utilisateur non connecté ne peut pas créer une annonce
         if (!$this->getUser()) {
-            return $this->redirectToRoute('home.index');
+            return $this->redirectToRoute('security.login');
         }
 
         // Empêcher un vendeur non validé de créer une annonce
-        if ($this->getUser()->getRoles()[0] != 'ROLE_SELLER') {
+        if (!in_array('ROLE_SELLER', $this->getUser()->getRoles())) {
             return $this->redirectToRoute('seller.index');
         }
 
@@ -148,7 +192,7 @@ final class SellerController extends AbstractController
 
             // Puis associer le vendeur à la nouvelle annonce crée
             $vehicle->setSeller($seller);
-            $vehicle->setStatus("pending");
+            $vehicle->setStatus("active");
 
             // Sauvegarde de l'annonce
             $manager->persist($vehicle);
@@ -160,6 +204,76 @@ final class SellerController extends AbstractController
         return $this->render('pages/seller/annonce_new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/vendeur/detail-annonce-{id}', 'annonce.show', methods: ['GET'])]
+    public function annonceShow(
+        Vehicle $vehicle
+    ): Response
+    {
+        return $this->render('pages/seller/annonce_show.html.twig', [
+            'vehicle' => $vehicle
+        ]);
+    }
+
+    #[Route('/vendeur/modification-annonce-{id}', 'annonce.edit', methods: ['GET', 'POST'])]
+    public function annonceEdit(Vehicle $vehicle, Request $request, 
+    EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(VehicleType::class, $vehicle);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $vehicle = $form->getData();
+
+            $manager->persist($vehicle);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Modification de l\'annonce éfféctué.'
+            );
+
+            return $this->redirectToRoute('annonce.index');
+        }
+
+        return $this->render('pages/seller/annonce_edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/vendeur/modifier-status-annonce-{id}', 'annonce.edit.status', methods: ['GET'])]
+    public function setStatusAnnonce(Vehicle $vehicle,
+    EntityManagerInterface $manager): Response
+    {
+        if($vehicle->getStatus() == 'active')
+        {
+            $vehicle->setStatus('paused');
+            $manager->persist($vehicle);
+            $manager->flush();
+        }
+        else {
+            $vehicle->setStatus('active');
+            $manager->persist($vehicle);
+            $manager->flush();
+        }
+        return $this->redirectToRoute('annonce.index');
+    }
+
+    #[Route('/vendeur/supprimer-annonce-{id}', 'annonce.delete', methods: ['GET'])]
+    public function annonceDelete(Vehicle $vehicle,
+    EntityManagerInterface $manager): Response
+    {
+        $manager->remove($vehicle);
+        $manager->flush();
+
+        $this->addFlash(
+                'success',
+                'Suppression de l\'annonce éfféctué.'
+        );
+
+        return $this->redirectToRoute('annonce.index');
+
     }
 
     /**
@@ -176,11 +290,11 @@ final class SellerController extends AbstractController
     ): Response {
         // Un utilisateur non connecté ne peut pas ajouter des images à une annonce
         if (!$this->getUser()) {
-            return $this->redirectToRoute('home.index');
+            return $this->redirectToRoute('security.login');
         }
 
         // Empêcher un vendeur non validé d'ajouter des images à une annonce
-        if ($this->getUser()->getRoles()[0] != 'ROLE_SELLER') {
+        if (!in_array('ROLE_SELLER', $this->getUser()->getRoles())) {
             return $this->redirectToRoute('seller.index');
         }
 
@@ -218,7 +332,7 @@ final class SellerController extends AbstractController
     ): Response {
         // Un utilisateur non connecté ne peut voir ses notifications
         if (!$this->getUser()) {
-            return $this->redirectToRoute('home.index');
+            return $this->redirectToRoute('security.login');
         }
 
         // Un utilisateur qui n'a pas envoyé une demande vendeur
@@ -279,4 +393,5 @@ final class SellerController extends AbstractController
 
         return $this->redirectToRoute('seller.notification.index');
     }
+
 }

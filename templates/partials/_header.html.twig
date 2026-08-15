@@ -54,7 +54,7 @@
 		{% if app.user %}
 
 			{# Si l'utilisateur connecté à déjà envoyé une demande d'inscription #}
-			{% if app.user.seller and app.current_route != 'seller.index' %}
+			{% if app.user.seller and app.current_route == 'home.index' %}
 			<a href="{{ path('seller.index') }}" class="flex items-center gap-1.5 text-gray-300 text-sm font-medium hover:text-[#F97316] transition-colors">
 				Dashboard
 			</a>

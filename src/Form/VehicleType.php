@@ -175,7 +175,8 @@ class VehicleType extends AbstractType
                     new Assert\NotBlank(message: "Le type de boîte de vitesse est obligatoire."),
                     new Assert\Choice(
                         choices: $trasmissions_array,
-                        message: "Veuillez choisir un type de boîte de vitesse valide.")
+                        message: "Veuillez choisir un type de boîte de vitesse valide."
+                    )
                 ]
             ])
             ->add('color', TextType::class, [
@@ -204,7 +205,8 @@ class VehicleType extends AbstractType
                     new Assert\NotBlank(message: "La déscription est obligatoire."),
                     new Assert\Length(
                         min: 30,
-                        minMessage: "La déscription doit contenir au moins {{ limit }} caractères.")
+                        minMessage: "La déscription doit contenir au moins {{ limit }} caractères."
+                    )
                 ]
             ])
             ->add('vehicleCondition', ChoiceType::class, [
@@ -222,7 +224,8 @@ class VehicleType extends AbstractType
                     new Assert\NotBlank(message: "L'état du véhicule est obligatoire."),
                     new Assert\Choice(
                         choices: $vehicleConditionsArray,
-                        message: "Veuillez choisir l'état de votre véhicule.")
+                        message: "Veuillez choisir l'état de votre véhicule."
+                    )
                 ]
             ])
             ->add('city', TextType::class, [
@@ -235,7 +238,13 @@ class VehicleType extends AbstractType
                 'label_attr' => [
                     'class' => 'mt-4 uppercase'
                 ],
-                'constraints' => new Assert\NotBlank(message: "La localisation est obligatoire.")
+                'constraints' => [
+                    new Assert\NotBlank(message: "La localisation est obligatoire."),
+                    new Assert\Length(
+                        min: 3,
+                        minMessage: "La localisation doit contenir au moins {{ limit }} caractères."
+                    )
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [

@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des annonces - Vendeur
+{% endblock %}
+
+{% block body %}
+	<div class="min-h-screen bg-[#1a1a1a] text-white p-6">
+
+		<a href="{{ path('seller.index') }}" class="text-sm text-[#F97316] hover:text-[#ffb066] transition mb-2 inline-flex items-center gap-2">
+
+			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+
+			</svg>
+			Retour à l'acceuil
+		</a>
+
+		<!-- HEADER -->
+		<div class="mb-6 mt-3">
+			<h1 class="text-2xl font-bold">Gestion des annonces</h1>
+			{% if not vehicles.items is same as([]) %}
+				<p class="text-gray-500 text-sm mt-1">
+					Il y a
+					<span class="font-semibold text-gray-500">{{ vehicles.getTotalItemCount }}</span>
+					annonce(s) au total
+				</p>
+			{% endif %}
+		</div>
+
+		<!-- ===================== Annonce ===================== -->
+		<div class="bg-[#111111] rounded-lg p-5 mb-10">
+
+			{% if not vehicles.items is same as([]) %}
+				<h2 class="text-lg font-bold mb-4">Liste des annonces</h2>
+
+				{# Message flashe succès #}
+				{% for message in app.flashes('success') %}
+					<div class="w-85 bg-[#111111] rounded-xl flex row items-center justify-evenly mb-3">
+						<p class="text-[15px] p-4 text-white whitespace-nowrap">
+							{{ message }}
+						</p>
+						<svg class="w-7 h-7 m-4 bg-green-500 rounded-full" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+						</svg>
+					</div>
+				{% endfor %}
+
+				<table class="w-full text-sm">
+					<thead class="text-gray-400 border-b border-[#2a2a2a]">
+						<tr>
+							<th class="text-left py-3">N°</th>
+							<th class="text-left py-3">Marque</th>
+							<th class="text-left py-3">État</th>
+							<th class="text-left py-3">Prix</th>
+							<th class="text-left py-3">Date de création</th>
+							<th class="text-left py-3">Status</th>
+							<th class="text-left py-3" colspan="4">Actions</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for vehicle in vehicles %}
+							<tr class="border-b border-[#1f1f1f]">
+								<td class="py-3">#{{ vehicle.id }}</td>
+								<td class="py-3 font-semibold">{{ vehicle.brand }}</td>
+								<td class="py-3">{{ vehicle.vehicleCondition }}</td>
+								<td class="py-3 font-semibold">{{ vehicle.price|number_format(0, ',', ' ') }}
+									MGA</td>
+								<td class="py-3">{{ vehicle.createdAt|date('d:m:Y') }}</td>
+								<td class="py-3">
+									{% if vehicle.status == 'active' %}
+										<span class="bg-green-600/20 text-green-400 px-3 py-1 rounded text-xs">
+											Active
+										</span>
+									{% else %}
+										<span class="bg-orange-600/20 text-orange-400 px-3 py-1 rounded text-xs">
+											En pause
+										</span>
+									{% endif %}
+								</td>
+								<td class="py-3 flex gap-2">
+									<a href="{{ path('annonce.show', { id:vehicle.id }) }}" class="bg-yellow-500/20 text-yellow-400 active:bg-yellow-500/60 px-3 py-1 rounded text-xs transition">Voir détails</a>
+									<a href="{{ path('annonce.edit', { id:vehicle.id }) }}" class="bg-green-500/10 text-green-400 active:bg-green-500/60 px-3 py-1 rounded text-xs transition">Modifier</a>
+									<a href="{{ path('annonce.edit.status', { id:vehicle.id }) }}" class="bg-blue-500/10 text-blue-400 active:bg-blue-500/60 px-3 py-1 rounded text-xs transition">
+										{{ vehicle.status is same as('active') ? 'Mettre en pause' : 'Activer' }}
+									</a>
+									<a href="{{ path('annonce.delete', { id:vehicle.id }) }}" class="bg-red-500/10 text-red-400 active:bg-red-500/60 px-3 py-1 rounded text-xs transition">Supprimer</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			{% else %}
+				<!-- État vide -->
+				<div class="flex flex-col items-center justify-center py-20 text-center">
+					<p class="text-2xl font-semibold mb-2">Aucune annonces</p>
+					<p class="text-gray-500 text-sm mb-6">Vos annonces publiées seront affichées ici.</p>
+				</div>
+			{% endif %}
+
+		</div>
+		{# Pagination #}
+		<div class="flex justify-center">
+			{{ knp_pagination_render(vehicles) }}
+		</div>
+
+	</div>
+{% endblock %}

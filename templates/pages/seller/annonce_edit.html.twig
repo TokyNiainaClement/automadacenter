@@ -1,15 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	AutoMadaCenter - Création d'une annonce
+	AutoMadaCenter - Modification d'une annonce
 {% endblock %}
 
 {% block body %}
 	<div class="max-w-5xl mx-auto bg-[#222222] border border-[#333] rounded-2xl p-8 my-5">
-		<h1 class="text-xl font-black">Ajouter une annonce</h1>
-		<p class="text-gray-500 mt-4 mb-4">Décrivez votre véhicule en détail pour attirer les meilleurs acheteurs. Une annonce complète et précise sera publiée avec le badge
-			<span class="text-[#F97316]">Annonce Vérifiée</span>
-			après validation par notre équipe</p>
+		<h1 class="text-xl font-black mb-4">Modifier une annonce</h1>
 
 		{{ form_start(form, { 'attr' : { 'data-turbo' : 'false' } }) }}
 
