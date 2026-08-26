@@ -15,11 +15,11 @@
 		{% endblock %}
 	</head>
 
-	<body class="bg-[#1a1a1a] text-white text-sm {{ app.current_route != 'home.index' and app.current_route != 'seller.new' ? 'flex' : '' }}">
+	<body class="bg-[#1a1a1a] text-white text-sm {{ app.current_route != 'home.index' and app.current_route != 'home.annonce.show' and app.current_route != 'seller.new' ? 'flex' : '' }}">
 
 		{{ importmap('app') }}
 
-		{% if app.current_route != 'home.index' and app.current_route != 'seller.new' %}
+		{% if app.current_route != 'home.index' and app.current_route != 'home.annonce.show' and app.current_route != 'seller.new' %}
 			<!-- SIDEBAR -->
 			<aside
 				class="w-64 min-h-screen bg-[#111111] fixed left-0 top-0 p-5">
@@ -105,7 +105,7 @@
 
 
 		<!-- MAIN CONTENT -->
-		<div class="{{ app.current_route != 'home.index' and app.current_route != 'seller.new' ? 'ml-64 w-full' : ''}}">
+		<div class="{{ app.current_route != 'home.index' and app.current_route != 'home.annonce.show' and app.current_route != 'seller.new' ? 'ml-64 w-full' : ''}}">
 
 			{% block header %}
 				{% include "partials/_header.html.twig" %}

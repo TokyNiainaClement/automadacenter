@@ -17,12 +17,34 @@ class VehicleRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicle::class);
     }
 
+    /**
+     * Méthode permet de récuperer les annones d'un vendeur
+     *
+     * @param Seller $seller
+     * @return array
+     */
     public function findAnnonces(Seller $seller): array
     {
         return $this->createQueryBuilder('v')
         ->where('v.seller = :seller')
         ->setParameter('seller', $seller)
         ->orderBy('v.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+
+    /**
+     * Méthode permet de récuperer les annonces active.
+     *
+     * @return array
+     */
+    public function findActiveAnnonces(): array
+    {
+        return $this->createQueryBuilder('v')
+        ->where('v.status = :status')
+        ->setParameter('status', 'active')
+        ->orderBy('v.createdAt', 'DESC')
+        ->setMaxResults(4)
         ->getQuery()
         ->getResult();
     }
